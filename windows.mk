@@ -59,7 +59,7 @@ upload:
 	gpg --detach-sign --default-key $(PGPKEYID) \
 		$(PACKAGE)-$(VERSION)-win$(BITS).zip
 	gpg --verify $(PACKAGE)-$(VERSION)-win$(BITS).zip.sig
-	$(YUBICO_GITHUB_REPO)/publish $(PROJECT) $(VERSION) $(PACKAGE)-$(VERSION)-win${BITS}.zip*
+	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION)-win${BITS}.zip*
 
 upload-32bit:
 	$(MAKE) -f windows.mk upload BITS=32
