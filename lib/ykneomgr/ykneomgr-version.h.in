@@ -1,0 +1,78 @@
+/*
+ * Copyright (C) 2013 Yubico AB
+ *
+ * This library is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of the
+ * License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef YKNEOMGR_VERSION_H
+#define YKNEOMGR_VERSION_H
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+/**
+ * YKNEOMGR_VERSION_STRING
+ *
+ * Pre-processor symbol with a string that describe the header file
+ * version number.  Used together with ykneomgr_check_version() to verify
+ * header file and run-time library consistency.
+ */
+#define YKNEOMGR_VERSION_STRING "@VERSION@"
+
+/**
+ * YKNEOMGR_VERSION_NUMBER
+ *
+ * Pre-processor symbol with a hexadecimal value describing the header
+ * file version number.  For example, when the header version is 1.2.3
+ * this symbol will have the value 0x01020300.  The last two digits
+ * are only used between public releases, and will otherwise be 00.
+ */
+#define YKNEOMGR_VERSION_NUMBER @YKNEOMGR_VERSION_NUMBER@
+
+/**
+ * YKNEOMGR_VERSION_MAJOR
+ *
+ * Pre-processor symbol with a decimal value that describe the major
+ * level of the header file version number.  For example, when the
+ * header version is 1.2.3 this symbol will be 1.
+ */
+#define YKNEOMGR_VERSION_MAJOR @YKNEOMGR_VERSION_MAJOR@
+
+/**
+ * YKNEOMGR_VERSION_MINOR
+ *
+ * Pre-processor symbol with a decimal value that describe the minor
+ * level of the header file version number.  For example, when the
+ * header version is 1.2.3 this symbol will be 2.
+ */
+#define YKNEOMGR_VERSION_MINOR @YKNEOMGR_VERSION_MINOR@
+
+/**
+ * YKNEOMGR_VERSION_PATCH
+ *
+ * Pre-processor symbol with a decimal value that describe the patch
+ * level of the header file version number.  For example, when the
+ * header version is 1.2.3 this symbol will be 3.
+ */
+#define YKNEOMGR_VERSION_PATCH @YKNEOMGR_VERSION_PATCH@
+
+  const char *ykneomgr_check_version (const char *req_version);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

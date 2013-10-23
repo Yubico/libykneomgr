@@ -1,0 +1,42 @@
+# Copyright (C) 2013 Yubico AB
+#
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
+# License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+YKNEOMGR_0.0.0
+{
+  global:
+    ykneomgr_applet_delete;
+    ykneomgr_applet_install;
+    ykneomgr_applet_list;
+    ykneomgr_authenticate;
+    ykneomgr_check_version;
+    ykneomgr_connect;
+    ykneomgr_discover;
+    ykneomgr_done;
+    ykneomgr_get_mode;
+    ykneomgr_get_serialno;
+    ykneomgr_get_version_build;
+    ykneomgr_get_version_major;
+    ykneomgr_get_version_minor;
+    ykneomgr_global_done;
+    ykneomgr_global_init;
+    ykneomgr_init;
+    ykneomgr_list_devices;
+    ykneomgr_modeswitch;
+    ykneomgr_strerror;
+    ykneomgr_strerror_name;
+
+  local:
+    *;
+};

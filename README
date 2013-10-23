@@ -1,0 +1,107 @@
+Yubico YubiKey NEO Manager C Library
+====================================
+
+Introduction
+------------
+
+This is a C library to interact with the YubiKey NEO.  There is a
+command line tool "ykneomgr" for interactive use.  It supports
+querying the YubiKey NEO for firmware version, operation mode
+(OTP/CCID) and serial number.  You may also mode switch the device and
+manage applets (list, delete and install).
+
+For more information about Yubico and the YubiKey, see:
+https://www.yubico.com/
+
+License
+-------
+
+The project is licensed under the LGPLv2+ license.  See the file
+COPYING for exact wording.  For any copyright year range specified as
+YYYY-ZZZZ in this package note that the range specifies every single
+year in that closed interval.
+
+Building
+--------
+
+After downloading and unpacking the package tarball, you build it as
+follows.
+
+  ./configure
+  make check
+  sudo make install
+
+The backend to use is decided at compile time, see the summary at the
+end of the ./configure output.  Use --with-backend=foo to chose
+backend.  The recommended backend is "globalplatform" which will be
+selected if present.  The other two backends "pcsc" and "winscard"
+uses the PCSC interface, with slightly different shared library
+linkage: "pcsc" is used under GNU-like systems, and "winscard" is used
+under Windows.
+
+Warning!  Currently the "pcsc" and "winscard" backends have no support
+for listing and deleting applets.  Invoking these functions will
+result in an error.  Hopefully this limitation will be removed, when
+someone add an implementation of the Global Platform Security Protocol
+(version 2 mode 55) using native PCSC.
+
+To force building using the PCSC interface even though GlobalPlatform
+is availble, you would use:
+
+  ./configure --with-backend=pcsc
+
+Usage
+-----
+
+The library usage is documented in the API manual, see gtk-doc/html/
+after you built with ./configure --enable-gtk-doc.
+
+There is a command line utility "ykneomgr" for command line use.  Use
+"man ykneomgr" to read the documentation for it.
+
+Building from version controlled sources
+----------------------------------------
+
+Warning!  This is only for developers and if you don't understand what
+you are doing, you should download the release files instead.
+
+You may check out the sources using Git with the following command:
+
+  git clone git://github.com/Yubico/libykneomgr.git
+
+This will create a directory 'libykneomgr'.  Enter the directory:
+
+  cd libykneomgr
+
+Recent versions of autoconf, automake and libtool must be installed.
+Help2man is used to generate the manpages.  Gengetopt is needed for
+command line parameter handling.
+
+Generate the build system using:
+
+  autoreconf --install
+
+Then you follow the normal build instructions, see above.
+
+For developers, it is recommended to build with GTK-DOC enabled (so
+that "make dist" works) and to enable GCC warnings.
+
+  ./configure --enable-gtk-doc  --enable-gtk-doc-pdf --enable-gcc-warnings
+
+Portability
+-----------
+
+The main development platform is Debian GNU/Linux and it should be
+well supported.  It has also been cross-compiled to Windows using
+MinGW (see windows.mk) using the PCSC backend.
+
+Namespaces
+----------
+
+Project full name: Yubico YubiKey NEO Manager C Library
+Project short name: libykneomgr
+Header files: $prefix/include/ykneomgr/*
+Library files: $prefix/lib/libykneomgr.*
+Library symbol prefix: ykneomgr_
+Command line tool: ykneomgr
+Pkg-config: ykneomgr

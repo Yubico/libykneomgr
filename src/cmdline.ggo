@@ -1,0 +1,29 @@
+# Copyright (C) 2013 Yubico AB
+#
+# This library is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as
+# published by the Free Software Foundation; either version 2.1 of the
+# License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+package "ykneomgr"
+
+purpose "YubiKey NEO management tool."
+
+option "get-mode" m "Output mode of YubiKey NEO" flag off
+option "get-version" w "Output firmware version for YubiKey NEO" flag off
+option "get-serialno" s "Output serial number" flag off
+option "list-readers" l "List all connected PCSC devices" flag off
+option "applet-list" a "List applets on device" flag off
+option "applet-delete" D "Delete given applet AID from device" string optional
+option "applet-install" i "Install applets on device from CAP file" string typestr="FILE" optional
+option "set-mode" M "Set the USB operation mode of the YubiKey NEO.\nThe possible MODE arguments are:\n0 for HID device only,\n1 for CCID device only,\n2 for HID/CCID composite device.\n81 for CCID-only with touch eject.\n82 for HID/CCID with touch eject." string optional
+
+option "debug" d "Print debug information to standard error" flag off
