@@ -135,17 +135,23 @@ ykneomgr_connect (ykneomgr_dev * dev, const char *name)
   if (rc != YKNEOMGR_OK)
     return rc;
 
-  if (recvAPDULen != 6 && recvAPDU[5] != 0x90 && recvAPDU[6] != 0x00)
+  if (!((recvAPDULen == 2 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)
+	|| (recvAPDULen == 6 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)))
     {
-      size_t i;
-      printf ("apdu %zd: ", recvAPDULen);
-      for (i = 0; i < recvAPDULen; i++)
-	printf ("%02x ", recvAPDU[i]);
-      printf ("\t");
+      if (debug)
+	{
+	  size_t i;
+	  printf ("apdu %zd: ", recvAPDULen);
+	  for (i = 0; i < recvAPDULen; i++)
+	    printf ("%02x ", recvAPDU[i]);
+	  printf ("\n");
+	}
+
       return YKNEOMGR_BACKEND_ERROR;
     }
 
-  dev->serialno = GETU32 (recvAPDU);
+  if (recvAPDULen == 6)
+    dev->serialno = GETU32 (recvAPDU);
 
   if (debug)
     {
