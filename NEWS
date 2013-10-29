@@ -2,6 +2,8 @@ libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
 * Version 0.0.1 (unreleased)
 
+** libykneomgr: Work with NEOs without serial numbers.
+
 * Version 0.0.0 (released 2013-10-23)
 
 ** Initial release.
