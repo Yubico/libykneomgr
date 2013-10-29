@@ -136,7 +136,7 @@ ykneomgr_connect (ykneomgr_dev * dev, const char *name)
     return rc;
 
   if (!((recvAPDULen == 2 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)
-	|| (recvAPDULen == 6 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)))
+	|| (recvAPDULen == 6 && recvAPDU[4] == 0x90 && recvAPDU[5] == 0x00)))
     {
       if (debug)
 	{
