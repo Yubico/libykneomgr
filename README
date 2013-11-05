@@ -33,17 +33,20 @@ follows.
 
 The backend to use is decided at compile time, see the summary at the
 end of the ./configure output.  Use --with-backend=foo to chose
-backend.  The recommended backend is "globalplatform" which will be
-selected if present.  The other two backends "pcsc" and "winscard"
-uses the PCSC interface, with slightly different shared library
-linkage: "pcsc" is used under GNU-like systems, and "winscard" is used
-under Windows.
+backend, replacing foo with the backend you want to use.  The default
+and recommended backend is "globalplatform" which will be selected if
+present.  The other backends "pcsc", "macscard", and "winscard" uses
+the PCSC interface, with slightly different shared library linkage and
+header file names: "pcsc" is used under GNU-like systems, "macscard"
+under Mac OS X, and "winscard" is used under Windows.  In most
+situations, running ./configure should automatically find the proper
+backend to use.
 
-Warning!  Currently the "pcsc" and "winscard" backends have no support
-for listing and deleting applets.  Invoking these functions will
-result in an error.  Hopefully this limitation will be removed, when
-someone add an implementation of the Global Platform Security Protocol
-(version 2 mode 55) using native PCSC.
+Warning!  Currently the "pcsc"/"macscard"/"winscard" have no support
+for listing, deleting and installing applets.  These functions will
+result in an error.  This limitation will be removed when an
+implementation of the Global Platform Security Protocol (version 2
+mode 55) using native PCSC is added.
 
 To force building using the PCSC interface even though GlobalPlatform
 is availble, you would use:
@@ -91,9 +94,10 @@ that "make dist" works) and to enable GCC warnings.
 Portability
 -----------
 
-The main development platform is Debian GNU/Linux and it should be
-well supported.  It has also been cross-compiled to Windows using
-MinGW (see windows.mk) using the PCSC backend.
+The main development platform is Debian GNU/Linux.  The project is
+cross-compiled to Windows using MinGW (see windows.mk) using the PCSC
+backend.  It may also be built for Mac OS X (see macosx.mk), also
+using the PCSC backend.
 
 Namespaces
 ----------
@@ -101,7 +105,7 @@ Namespaces
 Project full name: Yubico YubiKey NEO Manager C Library
 Project short name: libykneomgr
 Header files: $prefix/include/ykneomgr/*
-Library files: $prefix/lib/libykneomgr.*
+Library files: $prefix/lib/libykneomgr*
 Library symbol prefix: ykneomgr_
 Command line tool: ykneomgr
 Pkg-config: ykneomgr
