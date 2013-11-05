@@ -26,8 +26,7 @@ backend_init (ykneomgr_dev * d)
   if (result != SCARD_S_SUCCESS)
     {
       if (debug)
-	printf ("SCardEstablishContext %ld: %s\n", (long) result,
-		pcsc_stringify_error (result));
+	printf ("SCardEstablishContext %ld\n", (long) result);
       return YKNEOMGR_BACKEND_ERROR;
     }
 
@@ -43,8 +42,7 @@ backend_done (ykneomgr_dev * dev)
   if (result != SCARD_S_SUCCESS)
     {
       if (debug)
-	printf ("SCardReleaseContext %ld: %s\n", (long) result,
-		pcsc_stringify_error (result));
+	printf ("SCardReleaseContext %ld\n", (long) result);
       /* XXX error code ignored */
     }
 }
@@ -62,8 +60,7 @@ backend_connect (ykneomgr_dev * dev, const char *name)
   if (result != SCARD_S_SUCCESS)
     {
       if (debug)
-	printf ("SCardConnect %ld: %s\n", (long) result,
-		pcsc_stringify_error (result));
+	printf ("SCardConnect %ld\n", (long) result);
       return YKNEOMGR_BACKEND_ERROR;
     }
 
@@ -95,8 +92,7 @@ backend_apdu (ykneomgr_dev * dev,
   if (result != SCARD_S_SUCCESS)
     {
       if (debug)
-	printf ("SCardTransmit %ld: %s\n", (long) result,
-		pcsc_stringify_error (result));
+	printf ("SCardTransmit %ld\n", (long) result);
       return YKNEOMGR_BACKEND_ERROR;
     }
 
@@ -123,8 +119,7 @@ backend_list_devices (ykneomgr_dev * dev, char *devicestr, size_t * len)
   if (result != SCARD_S_SUCCESS)
     {
       if (debug)
-	printf ("SCardListReaders %ld: %s\n", (long) result,
-		pcsc_stringify_error (result));
+	printf ("SCardListReaders %ld\n", (long) result);
       return YKNEOMGR_BACKEND_ERROR;
     }
 
