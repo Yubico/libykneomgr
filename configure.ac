@@ -39,6 +39,17 @@ AC_ARG_WITH([backend],
     [],
     [with_backend=check])
 
+case "$with_backend$host" in
+  check*-darwin*)
+    AC_MSG_NOTICE([Detected Mac: selecting macscard backend])
+    AC_MSG_NOTICE([use --with-backend to override])
+    with_backend=macscard ;;
+  check*-mingw*)
+    AC_MSG_NOTICE([Detected Windows: selecting winscard backend])
+    AC_MSG_NOTICE([use --with-backend to override])
+    with_backend=winscard ;;
+esac
+
 if test "x$with_backend" = xcheck \
    || test "x$with_backend" = xglobalplatform; then
   PKG_CHECK_MODULES([GLOBALPLATFORM], [globalplatform],
@@ -73,6 +84,7 @@ fi
 
 if test "x$with_backend" = xmacscard; then
   AC_MSG_NOTICE([checking for PCSC with Mac linkage])
+  AC_CHECK_HEADERS([PCSC/winscard.h])
   PCSC_MACOSX_LIBS="-Wl,-framework -Wl,PCSC"
   save_LIBS="$LIBS"
   LIBS="$LIBS $PCSC_MACOSX_LIBS"
