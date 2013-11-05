@@ -4,6 +4,8 @@ libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
 ** libykneomgr: Work with NEOs without serial numbers.
 
+** Improved PCSC detection, builds on Mac as well.
+
 * Version 0.0.0 (released 2013-10-23)
 
 ** Initial release.
