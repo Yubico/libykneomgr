@@ -27,11 +27,12 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=build-aux --lgpl=2 --no-conditional-dependencies --no-libtool --macro-prefix=gl --no-vc-files lib-symbol-versions manywarnings
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=build-aux --lgpl=2 --no-conditional-dependencies --no-libtool --macro-prefix=gl --no-vc-files havelib lib-symbol-versions manywarnings
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
+  havelib
   lib-symbol-versions
   manywarnings
 ])

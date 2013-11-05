@@ -38,6 +38,7 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([gl_PROG_AR_RANLIB])
+  # Code from module havelib:
   # Code from module lib-symbol-versions:
   # Code from module manywarnings:
   # Code from module warnings:
@@ -200,10 +201,14 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # This macro records the list of files which have been installed by
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
+  build-aux/config.rpath
   lib/dummy.c
   m4/00gnulib.m4
   m4/gnulib-common.m4
   m4/ld-version-script.m4
+  m4/lib-ld.m4
+  m4/lib-link.m4
+  m4/lib-prefix.m4
   m4/manywarnings.m4
   m4/onceonly.m4
   m4/warnings.m4
