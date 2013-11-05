@@ -27,8 +27,13 @@
 #if BACKEND_GLOBALPLATFORM
 #include <globalplatform/globalplatform.h>
 #endif
-#if BACKEND_PCSC || BACKEND_WINSCARD
-#include <winscard.h>
+#if BACKEND_PCSC
+#if defined HAVE_PCSC_WINSCARD_H
+# include <PCSC/wintypes.h>
+# include <PCSC/winscard.h>
+#else
+# include <winscard.h>
+#endif
 #endif
 
 extern int debug;

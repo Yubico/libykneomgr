@@ -35,38 +35,67 @@ AM_MISSING_PROG([HELP2MAN], help2man, $missing_dir)
 
 AC_ARG_WITH([backend],
   [AS_HELP_STRING([--with-backend=ARG],
-    [use specific backend; 'pcsc', 'winscard' or 'globalplatform'])],
+    [use specific backend/linkage; 'pcsc', 'macscard', 'winscard', or 'globalplatform'])],
     [],
     [with_backend=check])
 
-if test "x$with_backend" = xcheck; then
-   AC_MSG_CHECKING([for backend (guessing)])
-   case "$host" in
-    *-mingw*) with_backend=winscard ;;
-    *) PKG_CHECK_EXISTS([globalplatform],
-                        [with_backend=globalplatform],
-                        [with_backend=pcsc]) ;;
-   esac
-   AC_MSG_RESULT([$with_backend])
+if test "x$with_backend" = xcheck \
+   || test "x$with_backend" = xglobalplatform; then
+  PKG_CHECK_MODULES([GLOBALPLATFORM], [globalplatform],
+                    [with_backend=globalplatform], [:])
 fi
 
-if test "x$with_backend" = "xglobalplatform"; then
-  PKG_CHECK_MODULES([GLOBALPLATFORM], [globalplatform])
+if test "x$with_backend" = xcheck || test "x$with_backend" = xpcsc; then
+  PKG_CHECK_MODULES([PCSC], [libpcsclite],
+                    [with_backend=pcsc], [:])
+fi
+
+if test "x$with_backend" = xcheck; then
+  AC_CHECK_HEADERS([PCSC/winscard.h])
+  AC_MSG_CHECKING([between Mac/Windows winscard])
+  if test "x$ac_cv_header_PCSC_winscard_h" = xyes; then
+    with_backend=macscard
+    AC_MSG_RESULT([Mac])
+  else
+    with_backend=winscard
+    AC_MSG_RESULT([Windows])
+  fi
+fi
+
+if test "x$with_backend" = xwinscard; then
+  AC_MSG_NOTICE([checking for winscard with Windows linkage])
+  AC_LIB_HAVE_LINKFLAGS(winscard,, [#include <winscard.h>],
+                        [SCardBeginTransaction(0)])
+  if test "x$ac_cv_libwinscard" != xyes; then
+    AC_MSG_ERROR([cannot find Windows winscard library/headers])
+  fi
+fi
+
+if test "x$with_backend" = xmacscard; then
+  AC_MSG_NOTICE([checking for PCSC with Mac linkage])
+  PCSC_MACOSX_LIBS="-Wl,-framework -Wl,PCSC"
+  save_LIBS="$LIBS"
+  LIBS="$LIBS $PCSC_MACOSX_LIBS"
+  AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <PCSC/wintypes.h>
+				    #include <PCSC/winscard.h>]],
+				  [[SCardBeginTransaction(0)]])],
+                 [AC_SUBST([PCSC_MACOSX_LIBS])],
+                 [AC_MSG_ERROR([cannot find Mac PCSC library/headers])])
+  LIBS="$save_LIBS"
+fi
+
+if test "x$with_backend" = xglobalplatform; then
   AC_DEFINE([BACKEND_GLOBALPLATFORM], 1,
             [Define to 1 if you the GLOBALPLATFORM backend.])
-elif test "x$with_backend" = "xpcsc"; then
-  PKG_CHECK_MODULES([PCSC], [libpcsclite])
-  AC_DEFINE([BACKEND_PCSC], 1, [Define to 1 if you the PCSC backend.])
-elif test "x$with_backend" = "xwinscard"; then
-  AC_LIB_HAVE_LINKFLAGS(winscard,, [#include <winscard.h>],
-                        [SCardBeginTransaction(NULL)])
+elif test "x$with_backend" = xpcsc || test "x$with_backend" = xwinscard \
+  || test "x$with_backend" = xmacscard; then
   AC_DEFINE([BACKEND_PCSC], 1, [Define to 1 if you the PCSC backend.])
 else
-  AC_MSG_ERROR([unknown backend: $with_backend])
+  AC_MSG_ERROR([cannot find PCSC/winscard library/headers])
 fi
+
 AM_CONDITIONAL([BACKEND_GLOBALPLATFORM], test x$with_backend = xglobalplatform)
-AM_CONDITIONAL([BACKEND_PCSC], test x$with_backend = xpcsc)
-AM_CONDITIONAL([BACKEND_WINSCARD], test x$with_backend = xwinscard)
+AM_CONDITIONAL([BACKEND_PCSC], test x$with_backend != xglobalplatform)
 
 gl_INIT
 
@@ -144,4 +173,7 @@ AC_MSG_NOTICE([summary of build options:
             LIBS:   ${PCSC_LIBS}
   Winscard
             LIBS:   ${LTLIBWINSCARD}
+  Mac PCSC
+            LIBS:   ${PCSC_MACOSX_LIBS}
+
 ])

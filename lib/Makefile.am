@@ -31,12 +31,9 @@ endif
 if BACKEND_PCSC
 libykneomgr_la_SOURCES += backend_pcsc.c
 endif
-if BACKEND_WINSCARD
-libykneomgr_la_SOURCES += backend_pcsc.c
-endif
 
 libykneomgr_la_LIBADD = $(GLOBALPLATFORM_LIBS) $(PCSC_LIBS) $(LTLIBWINSCARD)
-
+libykneomgr_la_LIBADD += $(PCSC_MACOSX_LIBS)
 libykneomgr_la_LDFLAGS = -no-undefined \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
