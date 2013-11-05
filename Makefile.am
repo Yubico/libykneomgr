@@ -19,6 +19,8 @@ ACLOCAL_AMFLAGS = -I m4 -I gl/m4
 
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
+EXTRA_DIST = windows.mk macosx.mk
+
 # Maintainer rules
 
 indent:
