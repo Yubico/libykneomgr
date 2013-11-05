@@ -24,7 +24,12 @@ backend_init (ykneomgr_dev * d)
 
   result = SCardEstablishContext (SCARD_SCOPE_USER, NULL, NULL, &d->card);
   if (result != SCARD_S_SUCCESS)
-    return YKNEOMGR_BACKEND_ERROR;
+    {
+      if (debug)
+	printf ("SCardEstablishContext %ld: %s\n", (long) result,
+		pcsc_stringify_error (result));
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   return YKNEOMGR_OK;
 }
@@ -32,8 +37,16 @@ backend_init (ykneomgr_dev * d)
 void
 backend_done (ykneomgr_dev * dev)
 {
-  SCardReleaseContext (dev->card);
-  /* XXX error code ignored */
+  LONG result;
+
+  result = SCardReleaseContext (dev->card);
+  if (result != SCARD_S_SUCCESS)
+    {
+      if (debug)
+	printf ("SCardReleaseContext %ld: %s\n", (long) result,
+		pcsc_stringify_error (result));
+      /* XXX error code ignored */
+    }
 }
 
 ykneomgr_rc
@@ -47,7 +60,12 @@ backend_connect (ykneomgr_dev * dev, const char *name)
 			 SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1,
 			 &dev->cardHandle, &activeProtocol);
   if (result != SCARD_S_SUCCESS)
-    return YKNEOMGR_BACKEND_ERROR;
+    {
+      if (debug)
+	printf ("SCardConnect %ld: %s\n", (long) result,
+		pcsc_stringify_error (result));
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   return YKNEOMGR_OK;
 }
@@ -75,7 +93,12 @@ backend_apdu (ykneomgr_dev * dev,
 			  send, sendlen, NULL, recv, &recvAPDULen);
   *recvlen = recvAPDULen;
   if (result != SCARD_S_SUCCESS)
-    return YKNEOMGR_BACKEND_ERROR;
+    {
+      if (debug)
+	printf ("SCardTransmit %ld: %s\n", (long) result,
+		pcsc_stringify_error (result));
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   if (debug)
     {
@@ -98,7 +121,12 @@ backend_list_devices (ykneomgr_dev * dev, char *devicestr, size_t * len)
   result = SCardListReaders (dev->card, NULL, devicestr, &readersSize);
   *len = readersSize;
   if (result != SCARD_S_SUCCESS)
-    return YKNEOMGR_BACKEND_ERROR;
+    {
+      if (debug)
+	printf ("SCardListReaders %ld: %s\n", (long) result,
+		pcsc_stringify_error (result));
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   return YKNEOMGR_OK;
 }
