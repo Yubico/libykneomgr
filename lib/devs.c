@@ -226,6 +226,9 @@ ykneomgr_discover (ykneomgr_dev * dev)
       j += strlen (buf + j) + 1;
     }
 
+  if (k == 0)
+    return YKNEOMGR_NO_DEVICE;
+
 done:
   free (buf);
 
