@@ -35,6 +35,7 @@ doit:
 	cd $(PACKAGE)-$(VERSION)/ && \
 	lt_cv_deplibs_check_method=pass_all ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
 	make install $(CHECK) && \
+	rm -rf $(PWD)/tmp$(ARCH)/root/lib/pkgconfig/ && \
 	mkdir $(PWD)/tmp$(ARCH)/root/doc && \
 	cp gtk-doc/$(PACKAGE).pdf $(PWD)/tmp$(ARCH)/root/doc/ && \
 	cp COPYING $(PWD)/tmp$(ARCH)/root/licenses/$(PACKAGE).txt && \
@@ -42,6 +43,7 @@ doit:
 	cd root && \
 	mv share/gtk-doc/html/$(PACKAGE)/* $(PWD)/tmp$(ARCH)/root/doc/ && \
 	rm -rf share/gtk-doc && \
+	rm -f ../../$(PACKAGE)-$(VERSION)-win$(ARCH).zip && \
 	zip -r ../../$(PACKAGE)-$(VERSION)-win$(ARCH).zip *
 
 32bit:
