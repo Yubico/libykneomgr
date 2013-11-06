@@ -88,14 +88,13 @@ ykneomgr_rc
 ykneomgr_connect (ykneomgr_dev * dev, const char *name)
 {
   int rc;
+  uint8_t recvAPDU[258];
+  size_t recvAPDULen = 258;
+  uint8_t buf[] = "\x00\xA4\x04\x00\x08\xA0\x00\x00\x05\x27\x20\x01\x01";
 
   rc = backend_connect (dev, name);
   if (rc != YKNEOMGR_OK)
     return rc;
-
-  uint8_t recvAPDU[258];
-  size_t recvAPDULen = 258;
-  uint8_t buf[] = "\x00\xA4\x04\x00\x08\xA0\x00\x00\x05\x27\x20\x01\x01";
 
   rc = backend_apdu (dev, buf, sizeof buf - 1, recvAPDU, &recvAPDULen);
   if (rc != YKNEOMGR_OK)
