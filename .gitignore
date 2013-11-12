@@ -75,6 +75,7 @@ lib/ykneomgr/Makefile.in
 lib/ykneomgr/ykneomgr-version.h
 libtool
 libykneomgr-*-mac.zip
+libykneomgr-*-mac.zip.sig
 libykneomgr-*-win*.zip
 libykneomgr-*-win*.zip.sig
 libykneomgr-*.tar.gz*
