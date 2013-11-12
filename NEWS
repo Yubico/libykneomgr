@@ -7,6 +7,7 @@ libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 ** libykneomgr_discover: Return error message when no devices are present.
 
 ** Improved PCSC detection, builds on Mac as well.
+We ship pre-built binaries generated from macosx.mk.
 
 * Version 0.0.0 (released 2013-10-23)
 
