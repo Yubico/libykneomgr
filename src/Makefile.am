@@ -32,7 +32,7 @@ dist_man_MANS = ykneomgr.1
 DISTCLEANFILES = $(dist_man_MANS)
 EXTRA_DIST = ykneomgr.h2m
 
-ykneomgr.1: $(srcdir)/ykneomgr.c $(srcdir)/ykneomgr.h2m $(srcdir)/cmdline.ggo $(top_srcdir)/configure.ac
+ykneomgr.1: $(srcdir)/ykneomgr.c $(srcdir)/ykneomgr.h2m $(srcdir)/cmdline.ggo $(top_srcdir)/configure.ac $(builddir)/ykneomgr$(EXEEXT)
 	$(HELP2MAN) \
 		--output=$@ $(builddir)/ykneomgr$(EXEEXT) \
 		--name="YubiKey NEO management tool" \
