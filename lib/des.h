@@ -29,9 +29,9 @@ typedef enum {
 
 /*********************** FUNCTION DECLARATIONS **********************/
 void des_key_setup(const unsigned char key[], unsigned char schedule[][6], DES_MODE mode);
-void des_crypt(const unsigned char in[], unsigned char out[], const unsigned char key[][6]);
+void des_crypt(const unsigned char in[], unsigned char out[], unsigned char key[][6]);
 
 void three_des_key_setup(const unsigned char key[], unsigned char schedule[][16][6], DES_MODE mode);
-void three_des_crypt(const unsigned char in[], unsigned char out[], const unsigned char key[][16][6]);
+void three_des_crypt(const unsigned char in[], unsigned char out[], unsigned char key[][16][6]);
 
 #endif   // DES_H

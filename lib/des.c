@@ -230,7 +230,7 @@ void des_key_setup(const unsigned char key[], unsigned char schedule[][6], DES_M
 	}
 }
 
-void des_crypt(const unsigned char in[], unsigned char out[], const unsigned char key[][6])
+void des_crypt(const unsigned char in[], unsigned char out[], unsigned char key[][6])
 {
 	unsigned int state[2],idx,t;
 
@@ -261,7 +261,7 @@ void three_des_key_setup(const unsigned char key[], unsigned char schedule[][16]
 	}
 }
 
-void three_des_crypt(const unsigned char in[], unsigned char out[], const unsigned char key[][16][6])
+void three_des_crypt(const unsigned char in[], unsigned char out[], unsigned char key[][16][6])
 {
 	des_crypt(in,out,key[0]);
 	des_crypt(out,out,key[1]);
