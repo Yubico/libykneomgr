@@ -18,8 +18,9 @@
 #include "internal.h"
 #include "des.h"
 
-const uint8_t selectApdu[] = {0x00, 0xa4, 0x04, 0x00, 0x08, 0xa0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00};
-const uint8_t initUpdate[] = {0x80, 0x50, 0x00, 0x00, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; /* TODO: random challenge */
+static const uint8_t selectApdu[] = {0x00, 0xa4, 0x04, 0x00, 0x08, 0xa0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00};
+static const uint8_t initUpdate[] = {0x80, 0x50, 0x00, 0x00, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}; /* TODO: random challenge */
+static const uint8_t listApdu[] = {0x80, 0xf2, 0x40, 0x00, 0x02, 0x4f, 0x00, 0x00};
 
 static int
 des_encrypt_cbc(const unsigned char *in, size_t in_len, unsigned char *out,
@@ -151,7 +152,6 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
 {
   uint8_t recv[256], send[256];
   size_t recvlen = sizeof(recv);
-  size_t sendlen;
   unsigned char buf[16], tmp[16], iv[DES_BLOCK_SIZE], raw_key[24];
   unsigned char sessionkey[16], mackey[16];
   unsigned char schedule[3][16][6];
@@ -242,10 +242,36 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
 ykneomgr_rc
 backend_applet_list (ykneomgr_dev * dev, char *appletstr, size_t * len)
 {
-  (void) dev;
-  (void) appletstr;
-  (void) len;
-  return YKNEOMGR_BACKEND_ERROR;
+  uint8_t recv[256];
+  size_t recvlen = sizeof(recv);
+  size_t length = 0;
+  char *p = appletstr;
+  int needlen;
+  size_t real_len = 0;
+
+  backend_apdu(dev, listApdu, sizeof(listApdu), recv, &recvlen);
+
+  needlen = (recvlen - 2) * 2;
+  *len = needlen;
+  if(!appletstr) {
+    return YKNEOMGR_OK;
+  }
+
+  while(length < recvlen - 2) {
+    size_t i;
+    size_t this_len = recv[length++];
+    for(i = 0; i < this_len; i++) {
+      sprintf(p, "%02x", recv[length]);
+      length++;
+      p += 2;
+      real_len += 2;
+    }
+    *p = '\0';
+    p++;
+    real_len++;
+    length += 2;
+  }
+  return YKNEOMGR_OK;
 }
 
 ykneomgr_rc
