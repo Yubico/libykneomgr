@@ -307,7 +307,7 @@ backend_applet_delete (ykneomgr_dev * dev, const uint8_t * aid, size_t aidlen)
 {
   uint8_t recv[261];
   uint8_t send[261];
-  size_t recvlen = sizeof(recv);
+  size_t recvlen = sizeof (recv);
   uint8_t *p = send;
   size_t sendlen;
 
@@ -318,14 +318,15 @@ backend_applet_delete (ykneomgr_dev * dev, const uint8_t * aid, size_t aidlen)
   *p++ = aidlen + 2;
   *p++ = 0x4f;
   *p++ = aidlen;
-  memcpy(p, aid, aidlen);
+  memcpy (p, aid, aidlen);
   p += aidlen;
   sendlen = p - send;
 
-  backend_apdu(dev, send, sendlen, recv, &recvlen);
-  if(recvlen == 3 && recv[1] == 0x90) {
-    return YKNEOMGR_OK;
-  }
+  backend_apdu (dev, send, sendlen, recv, &recvlen);
+  if (recvlen == 3 && recv[1] == 0x90)
+    {
+      return YKNEOMGR_OK;
+    }
 
   return YKNEOMGR_BACKEND_ERROR;
 }
