@@ -29,10 +29,10 @@
 #endif
 #if BACKEND_PCSC
 #if defined HAVE_PCSC_WINSCARD_H
-# include <PCSC/wintypes.h>
-# include <PCSC/winscard.h>
+#include <PCSC/wintypes.h>
+#include <PCSC/winscard.h>
 #else
-# include <winscard.h>
+#include <winscard.h>
 #endif
 #endif
 

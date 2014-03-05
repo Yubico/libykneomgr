@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 PACKAGE=libykneomgr
+LIBZIP_VERSION=0.11.2
 
 all: usage doit
 
@@ -30,12 +31,22 @@ usage:
 doit:
 	rm -rf tmp && mkdir tmp && cd tmp && \
 	mkdir -p root/licenses && \
+	cp ../libzip-$(LIBZIP_VERSION).tar.gz . || \
+	wget "http://www.nih.at/libzip/libzip-$(LIBZIP_VERSION).tar.gz" && \
+	tar xfz libzip-$(LIBZIP_VERSION).tar.gz && \
+	cd libzip-$(LIBZIP_VERSION) && \
+	./configure --prefix=$(PWD)/tmp$(ARCH)/root CFLAGS=-mmacosx-version-min=10.6 && \
+	make install check && \
+	cp LICENSE $(PWD)/tmp/root/licenses/libzip.txt && \
+	cd .. && \
 	cp ../$(PACKAGE)-$(VERSION).tar.gz . || cp ../../$(PACKAGE)-$(VERSION).tar.gz . && \
 	tar xfz $(PACKAGE)-$(VERSION).tar.gz && \
 	cd $(PACKAGE)-$(VERSION)/ && \
-	./configure CFLAGS=-mmacosx-version-min=10.6 --prefix=$(PWD)/tmp/root && \
+	PKG_CONFIG_PATH=$(PWD)/tmp/root/lib/pkgconfig ./configure CFLAGS=-mmacosx-version-min=10.6 --prefix=$(PWD)/tmp/root && \
 	make install check && \
 	rm -rf $(PWD)/tmp/root/lib/pkgconfig/ && \
+	install_name_tool -id @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/lib/libzip.2.dylib && \
+	install_name_tool -change $(PWD)/tmp/root/lib/libzip.2.dylib @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/bin/ykneomgr && \
 	install_name_tool -id @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/lib/libykneomgr.0.dylib && \
 	install_name_tool -change $(PWD)/tmp/root/lib/libykneomgr.0.dylib @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/bin/ykneomgr && \
 	mkdir $(PWD)/tmp/root/doc && \
