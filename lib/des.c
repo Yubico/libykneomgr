@@ -83,7 +83,7 @@ static const unsigned char sbox8[64] = {
 
 /*********************** FUNCTION DEFINITIONS ***********************/
 // Initial (Inv)Permutation step
-void
+static void
 IP (unsigned int state[], const unsigned char in[])
 {
   state[0] =
@@ -139,7 +139,7 @@ IP (unsigned int state[], const unsigned char in[])
 								     0);
 }
 
-void
+static void
 InvIP (unsigned int state[], unsigned char in[])
 {
   in[0] =
@@ -215,7 +215,7 @@ InvIP (unsigned int state[], unsigned char in[])
     BITNUMINTR (state[1], 24, 1) | BITNUMINTR (state[0], 24, 0);
 }
 
-unsigned int
+static unsigned int
 f (unsigned int state, const unsigned char key[])
 {
   unsigned char lrgstate[6];	//,i;
