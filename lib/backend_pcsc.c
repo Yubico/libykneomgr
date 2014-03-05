@@ -175,8 +175,16 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   unsigned char schedule[3][16][6];
   int i;
 
-  backend_apdu (dev, selectApdu, sizeof (selectApdu), recv, &recvlen);
-  backend_apdu (dev, initUpdate, sizeof (initUpdate), recv, &recvlen);
+  if (backend_apdu (dev, selectApdu, sizeof (selectApdu), recv, &recvlen) !=
+      YKNEOMGR_OK)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
+  if (backend_apdu (dev, initUpdate, sizeof (initUpdate), recv, &recvlen) !=
+      YKNEOMGR_OK)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   if (recvlen != 30)
     {
@@ -256,7 +264,10 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   tmp[5] ^= 0x80;
   three_des_crypt (tmp, send + 5 + 8, schedule);
 
-  backend_apdu (dev, send, 5 + 16, recv, &recvlen);
+  if (backend_apdu (dev, send, 5 + 16, recv, &recvlen) != YKNEOMGR_OK)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
   if (recvlen == 2 && recv[0] == 0x90 && recv[1] == 0x00)
     {
       return YKNEOMGR_OK;
@@ -274,7 +285,11 @@ backend_applet_list (ykneomgr_dev * dev, char *appletstr, size_t * len)
   int needlen;
   size_t real_len = 0;
 
-  backend_apdu (dev, listApdu, sizeof (listApdu), recv, &recvlen);
+  if (backend_apdu (dev, listApdu, sizeof (listApdu), recv, &recvlen) !=
+      YKNEOMGR_OK)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
 
   needlen = (recvlen - 2) * 2;
   *len = needlen;
@@ -322,7 +337,10 @@ backend_applet_delete (ykneomgr_dev * dev, const uint8_t * aid, size_t aidlen)
   p += aidlen;
   sendlen = p - send;
 
-  backend_apdu (dev, send, sendlen, recv, &recvlen);
+  if (backend_apdu (dev, send, sendlen, recv, &recvlen) != YKNEOMGR_OK)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
   if (recvlen == 3 && recv[1] == 0x90)
     {
       return YKNEOMGR_OK;
@@ -444,7 +462,10 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
     *q++ = 0;			/* hash len */
     *q++ = 0;
     *q++ = 0;			/* ? */
-    backend_apdu (dev, send, q - send, recv, &recvlen);
+    if (backend_apdu (dev, send, q - send, recv, &recvlen) != YKNEOMGR_OK)
+      {
+	goto cleanup;
+      }
     if (recvlen != 3 && recv[1] != 0x90)
       {
 	goto cleanup;
@@ -469,7 +490,11 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
 	*q++ = j;
 	*q++ = this_len;
 	memcpy (q, p, this_len);
-	backend_apdu (dev, send, this_len + 5, recv, &recvlen);
+	if (backend_apdu (dev, send, this_len + 5, recv, &recvlen) !=
+	    YKNEOMGR_OK)
+	  {
+	    goto cleanup;
+	  }
 	if (recvlen != 3 && recv[1] != 0x90)
 	  {
 	    goto cleanup;
@@ -501,7 +526,10 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
     *q++ = 0x01;
     *q++ = 0;
     *q++ = 0;			/* install token len */
-    backend_apdu (dev, send, q - send, recv, &recvlen);
+    if (backend_apdu (dev, send, q - send, recv, &recvlen) != YKNEOMGR_OK)
+      {
+	goto cleanup;
+      }
     if (recvlen != 3 && recv[1] != 0x90)
       {
 	goto cleanup;
