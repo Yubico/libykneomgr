@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <zip.h>
 #include "internal.h"
 #include "des.h"
 
@@ -25,6 +26,14 @@ static const uint8_t selectApdu[] =
 static const uint8_t initUpdate[] = { 0x80, 0x50, 0x00, 0x00, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };	/* TODO: random challenge */
 static const uint8_t listApdu[] =
   { 0x80, 0xf2, 0x40, 0x00, 0x02, 0x4f, 0x00, 0x00 };
+static const uint8_t sdAid[] =
+  { 0xa0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00 };
+
+static const char *components[] =
+  { "Header.cap", "Directory.cap", "Import.cap", "Applet.cap", "Class.cap",
+  "Method.cap", "StaticField.cap", "ConstantPool.cap", "RefLocation.cap",
+  "Descriptor.cap"
+};
 
 static int
 des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
@@ -43,7 +52,7 @@ des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
   if (in_len > 0 && out_len >= DES_BLOCK_SIZE)
     {
       i += des_encrypt_cbc (in, in_len, out + DES_BLOCK_SIZE, out_len, out,
-		       schedule);
+			    schedule);
     }
   return i;
 }
@@ -306,7 +315,184 @@ backend_applet_delete (ykneomgr_dev * dev, const uint8_t * aid, size_t aidlen)
 ykneomgr_rc
 backend_applet_install (ykneomgr_dev * dev, const char *capfile)
 {
-  (void) dev;
-  (void) capfile;
-  return YKNEOMGR_BACKEND_ERROR;
+  int error;
+  size_t i;
+  struct zip *cap = zip_open (capfile, 0, &error);
+  size_t total_size = 0;
+  unsigned char *buf = NULL;
+  unsigned char *p;
+  unsigned char *packaid = NULL;
+  unsigned char *appaid = NULL;
+  size_t packaidlen = 0;
+  size_t appaidlen = 0;
+  ykneomgr_rc ret = YKNEOMGR_BACKEND_ERROR;
+
+  if (cap == NULL)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
+
+  for (i = 0; i < (sizeof (components) / sizeof (char *)); i++)
+    {
+      struct zip_stat stat;
+      if (zip_stat (cap, components[i], ZIP_FL_NODIR, &stat) == 0)
+	{
+	  total_size += stat.size;
+	}
+      else
+	{
+	  goto cleanup;
+	}
+    }
+
+  buf = malloc (total_size + 5);
+  p = buf;
+
+  *p++ = 0xc4;
+  if (total_size < 0x80)
+    {
+      *p++ = total_size;
+      total_size += 2;
+    }
+  else if (total_size < 0xff)
+    {
+      *p++ = 0x81;
+      *p++ = total_size;
+      total_size += 3;
+    }
+  else if (total_size < 0xffff)
+    {
+      *p++ = 0x82;
+      *p++ = ((total_size & 0xff00) >> 8);
+      *p++ = (total_size & 0xff);
+      total_size += 4;
+    }
+  else if (total_size < 0xffffff)
+    {
+      *p++ = 0x83;
+      *p++ = ((total_size & 0xff0000) >> 16);
+      *p++ = ((total_size & 0xff00) >> 8);
+      *p++ = (total_size & 0xff);
+      total_size += 5;
+    }
+  else
+    {
+      goto cleanup;
+    }
+
+  for (i = 0; i < (sizeof (components) / sizeof (char *)); i++)
+    {
+      struct zip_file *file = zip_fopen (cap, components[i], ZIP_FL_NODIR);
+      int len = zip_fread (file, p, total_size - (p - buf));
+      if (strcmp (components[i], "Header.cap") == 0)
+	{
+	  packaidlen = p[12];
+	  packaid = p + 13;
+	}
+      else if (strcmp (components[i], "Applet.cap") == 0)
+	{
+	  if (p[3] != 1)
+	    {
+	      printf ("Only support for 1 applet, found %d.\n", p[3]);
+	      goto cleanup;
+	    }
+	  appaidlen = p[4];
+	  appaid = p + 5;
+	}
+      p += len;
+      zip_fclose (file);
+    }
+
+  {
+    uint8_t recv[256];
+    size_t recvlen = sizeof (recv);
+    uint8_t send[0xff + 5];
+    uint8_t *q = send;
+    size_t j;
+
+    /* install for load */
+    *q++ = 0x80;
+    *q++ = 0xe6;		/* INS install */
+    *q++ = 0x02;
+    *q++ = 0;
+    *q++ = 1 + packaidlen + 1 + sizeof (sdAid) + 1 + 1 + 1;
+    *q++ = packaidlen;
+    memcpy (q, packaid, packaidlen);
+    q += packaidlen;
+    *q++ = sizeof (sdAid);
+    memcpy (q, sdAid, sizeof (sdAid));
+    q += sizeof (sdAid);
+    *q++ = 0;			/* hash len */
+    *q++ = 0;
+    *q++ = 0;			/* ? */
+    backend_apdu (dev, send, q - send, recv, &recvlen);
+    if (recvlen != 3 && recv[1] != 0x90)
+      {
+	goto cleanup;
+      }
+
+    /* load */
+    p = buf;
+    for (j = 0; j < (total_size / 0xff) + 1; j++)
+      {
+	size_t this_len = 0xff;
+	uint8_t p2 = 0;
+	recvlen = sizeof (recv);
+	q = send;
+	if (this_len > (total_size - (p - buf)))
+	  {
+	    this_len = (total_size - (p - buf));
+	    p2 = 0x80;
+	  }
+	*q++ = 0x80;
+	*q++ = 0xe8;		/* INS load */
+	*q++ = p2;
+	*q++ = j;
+	*q++ = this_len;
+	memcpy (q, p, this_len);
+	backend_apdu (dev, send, this_len + 5, recv, &recvlen);
+	if (recvlen != 3 && recv[1] != 0x90)
+	  {
+	    goto cleanup;
+	  }
+	p += this_len;
+      }
+
+    /* install and make selectable */
+    q = send;
+    recvlen = sizeof (recv);
+    *q++ = 0x80;
+    *q++ = 0xe6;
+    *q++ = 0x0c;
+    *q++ = 0;
+    *q++ = 1 + packaidlen + 1 + appaidlen + 1 + appaidlen + 1 + 1 + 3 + 1 + 1;
+    *q++ = packaidlen;
+    memcpy (q, packaid, packaidlen);
+    q += packaidlen;
+    *q++ = appaidlen;
+    memcpy (q, appaid, appaidlen);
+    q += appaidlen;
+    *q++ = appaidlen;		/* instance aid */
+    memcpy (q, appaid, appaidlen);
+    q += appaidlen;
+    *q++ = 1;			/* ? */
+    *q++ = 0;			/* privilege */
+    *q++ = 3;			/* install params len */
+    *q++ = 0xc9;
+    *q++ = 0x01;
+    *q++ = 0;
+    *q++ = 0;			/* install token len */
+    backend_apdu (dev, send, q - send, recv, &recvlen);
+    if (recvlen != 3 && recv[1] != 0x90)
+      {
+	goto cleanup;
+      }
+  }
+
+  ret = YKNEOMGR_OK;
+
+cleanup:
+  free (buf);
+  zip_close (cap);
+  return ret;
 }
