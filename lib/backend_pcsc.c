@@ -383,6 +383,10 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
     }
 
   buf = malloc (total_size + 5);
+  if (buf == NULL)
+    {
+      goto cleanup;
+    }
   p = buf;
 
   *p++ = 0xc4;
