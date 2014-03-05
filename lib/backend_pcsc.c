@@ -282,7 +282,6 @@ backend_applet_list (ykneomgr_dev * dev, char *appletstr, size_t * len)
   size_t recvlen = sizeof (recv);
   size_t length = 0;
   char *p = appletstr;
-  int needlen;
   size_t real_len = 0;
 
   if (backend_apdu (dev, listApdu, sizeof (listApdu), recv, &recvlen) !=
@@ -291,29 +290,37 @@ backend_applet_list (ykneomgr_dev * dev, char *appletstr, size_t * len)
       return YKNEOMGR_BACKEND_ERROR;
     }
 
-  needlen = (recvlen - 2) * 2;
-  *len = needlen;
-  if (!appletstr)
-    {
-      return YKNEOMGR_OK;
-    }
-
   while (length < recvlen - 2)
     {
       size_t i;
       size_t this_len = recv[length++];
       for (i = 0; i < this_len; i++)
 	{
-	  sprintf (p, "%02x", recv[length]);
-	  length++;
-	  p += 2;
+	  if (appletstr)
+	    {
+	      if (real_len + 2 > *len)
+		{
+		  return YKNEOMGR_BACKEND_ERROR;
+		}
+	      sprintf (p, "%02x", recv[length]);
+	      p += 2;
+	    }
 	  real_len += 2;
+	  length++;
 	}
-      *p = '\0';
-      p++;
+      if (appletstr)
+	{
+	  if (real_len + 1 > *len)
+	    {
+	      return YKNEOMGR_BACKEND_ERROR;
+	    }
+	  *p = '\0';
+	  p++;
+	}
       real_len++;
       length += 2;
     }
+  *len = real_len;
   return YKNEOMGR_OK;
 }
 
