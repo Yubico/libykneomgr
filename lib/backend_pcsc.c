@@ -32,7 +32,6 @@ static const uint8_t sdAid[] =
 static const char *components[] =
   { "Header.cap", "Directory.cap", "Import.cap", "Applet.cap", "Class.cap",
   "Method.cap", "StaticField.cap", "ConstantPool.cap", "RefLocation.cap",
-  "Descriptor.cap"
 };
 
 static int
