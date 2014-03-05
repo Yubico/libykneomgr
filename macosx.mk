@@ -44,6 +44,7 @@ doit:
 	cd $(PACKAGE)-$(VERSION)/ && \
 	PKG_CONFIG_PATH=$(PWD)/tmp/root/lib/pkgconfig ./configure CFLAGS=-mmacosx-version-min=10.6 --prefix=$(PWD)/tmp/root && \
 	make install check && \
+	rm -f $(PWD)/tmp$(ARCH)/root/bin/zipcmp $(PWD)/tmp$(ARCH)/root/bin/zipmerge $(PWD)/tmp$(ARCH)/root/bin/ziptorrent && \
 	rm -rf $(PWD)/tmp/root/lib/pkgconfig/ && \
 	install_name_tool -id @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/lib/libzip.2.dylib && \
 	install_name_tool -change $(PWD)/tmp/root/lib/libzip.2.dylib @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/bin/ykneomgr && \
