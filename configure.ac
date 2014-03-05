@@ -122,6 +122,8 @@ AC_ARG_ENABLE([gcc-warnings],
   [gl_gcc_warnings=no]
 )
 
+PKG_CHECK_MODULES(LIBZIP, libzip)
+
 if test "$gl_gcc_warnings" = yes; then
   nw="$nw -Wsystem-headers"          # Ignore system headers
   nw="$nw -Wpadded"                  # Struct's arenot padded
@@ -187,5 +189,8 @@ AC_MSG_NOTICE([summary of build options:
             LIBS:   ${LTLIBWINSCARD}
   Mac PCSC
             LIBS:   ${PCSC_MACOSX_LIBS}
+  libzip
+          CFLAGS:   ${LIBZIP_CFLAGS}
+            LIBS:   ${LIBZIP_LIBS}
 
 ])
