@@ -435,6 +435,7 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
 	  if (p[3] != 1)
 	    {
 	      printf ("Only support for 1 applet, found %d.\n", p[3]);
+	      zip_fclose (file);
 	      goto cleanup;
 	    }
 	  appaidlen = p[4];
