@@ -14,6 +14,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 PACKAGE=libykneomgr
+ZLIB_VERSION=1.2.8
+LIBZIP_VERSION=0.11.2
 
 all: usage 32bit 64bit
 
@@ -30,10 +32,24 @@ usage:
 doit:
 	rm -rf tmp$(ARCH) && mkdir tmp$(ARCH) && cd tmp$(ARCH) && \
 	mkdir -p root/licenses && \
+	cp ../zlib-$(ZLIB_VERSION).tar.gz . || \
+	wget "http://zlib.net/zlib-$(ZLIB_VERSION).tar.gz" && \
+	tar xfa zlib-$(ZLIB_VERSION).tar.gz && \
+	cd zlib-$(ZLIB_VERSION) && \
+	make -f win32/Makefile.gcc install DESTDIR=$(PWD)/tmp$(ARCH)/root/ PREFIX=$(HOST)- INCLUDE_PATH=include LIBRARY_PATH=lib BINARY_PATH=bin && \
+	cd .. && \
+	cp ../libzip-$(LIBZIP_VERSION).tar.gz . || \
+	wget "http://www.nih.at/libzip/libzip-$(LIBZIP_VERSION).tar.gz" && \
+	tar xfa libzip-$(LIBZIP_VERSION).tar.gz && \
+	cd libzip-$(LIBZIP_VERSION) && \
+	lt_cv_deplibs_check_method=pass_all ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --with-zlib=$(PWD)/tmp$(ARCH)/root && \
+	make install $(CHECK) && \
+	cp LICENSE $(PWD)/tmp$(ARCH)/root/licenses/libzip.txt && \
+	cd .. && \
 	cp ../$(PACKAGE)-$(VERSION).tar.gz . && \
 	tar xfa $(PACKAGE)-$(VERSION).tar.gz && \
 	cd $(PACKAGE)-$(VERSION)/ && \
-	lt_cv_deplibs_check_method=pass_all ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
+	lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
 	make install $(CHECK) && \
 	rm -rf $(PWD)/tmp$(ARCH)/root/lib/pkgconfig/ && \
 	mkdir $(PWD)/tmp$(ARCH)/root/doc && \
