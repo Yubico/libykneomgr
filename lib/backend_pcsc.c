@@ -324,11 +324,11 @@ backend_applet_delete (ykneomgr_dev * dev, const uint8_t * aid, size_t aidlen)
   sendlen = p - send;
 
   backend_apdu(dev, send, sendlen, recv, &recvlen);
-  if(recvlen == 2 && recv[0] == 0x90) {
+  if(recvlen == 3 && recv[1] == 0x90) {
     return YKNEOMGR_OK;
   }
 
-  return YKNEOMGR_OK;
+  return YKNEOMGR_BACKEND_ERROR;
 }
 
 ykneomgr_rc
