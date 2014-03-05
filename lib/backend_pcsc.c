@@ -32,7 +32,7 @@ des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
 		 unsigned char schedule[][16][6])
 {
   int i;
-  char tmp[8];
+  unsigned char tmp[8];
   for (i = 0; i < DES_BLOCK_SIZE; i++, in++, iv++)
     {
       tmp[i] = *in ^ *iv;
@@ -42,9 +42,10 @@ des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
   out_len -= DES_BLOCK_SIZE;
   if (in_len > 0 && out_len >= DES_BLOCK_SIZE)
     {
-      des_encrypt_cbc (in, in_len, out + DES_BLOCK_SIZE, out_len, out,
+      i += des_encrypt_cbc (in, in_len, out + DES_BLOCK_SIZE, out_len, out,
 		       schedule);
     }
+  return i;
 }
 
 ykneomgr_rc
