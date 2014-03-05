@@ -60,6 +60,8 @@ lib/backend_globalplatform.lo
 lib/backend_globalplatform.o
 lib/backend_pcsc.lo
 lib/backend_pcsc.o
+lib/des.lo
+lib/des.o
 lib/devs.lo
 lib/devs.o
 lib/error.lo
