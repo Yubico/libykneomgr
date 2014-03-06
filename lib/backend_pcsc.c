@@ -478,7 +478,7 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
       {
 	goto cleanup;
       }
-    if (recvlen != 3 && recv[1] != 0x90)
+    if (recvlen != 3 || recv[1] != 0x90)
       {
 	goto cleanup;
       }
@@ -507,7 +507,7 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
 	  {
 	    goto cleanup;
 	  }
-	if (recvlen != 3 && recv[1] != 0x90)
+	if (recvlen != 3 || recv[1] != 0x90)
 	  {
 	    goto cleanup;
 	  }
@@ -542,7 +542,7 @@ backend_applet_install (ykneomgr_dev * dev, const char *capfile)
       {
 	goto cleanup;
       }
-    if (recvlen != 3 && recv[1] != 0x90)
+    if (recvlen != 3 || recv[1] != 0x90)
       {
 	goto cleanup;
       }
