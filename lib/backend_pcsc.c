@@ -77,8 +77,9 @@ mac (ykneomgr_dev * dev, const unsigned char *in, size_t inlen,
       dev->icv[5] ^= 0x80;
       free (tmp);
     }
-  return des_encrypt_cbc (in + inlen - 8, 8, out, 8, dev->icv, dev->macKey,
-			  1);
+  des_encrypt_cbc (in + inlen - 8, 8, out, 8, dev->icv, dev->macKey, 1);
+  memcpy (dev->icv, out, 8);
+  return 8;
 }
 
 ykneomgr_rc
