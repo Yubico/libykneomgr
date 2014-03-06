@@ -1,6 +1,12 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.0.2 (unreleased)
+* Version 0.0.2 (released 2014-03-06)
+
+** libykneomgr: Add authentication, list, install and delete to pcsc backend.
+
+** libykneomgr: Use PCSC backend by default.
+
+** Fix %zd crash on windows by using printf from gnulib.
 
 * Version 0.0.1 (released 2013-11-12)
 
