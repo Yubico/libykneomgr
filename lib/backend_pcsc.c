@@ -37,7 +37,7 @@ static const char *components[] =
 static int
 des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
 		 size_t out_len, const unsigned char *iv,
-		 unsigned char schedule[][16][6])
+		 unsigned char schedule[][16][6], int triple)
 {
   int i;
   unsigned char tmp[8];
@@ -45,15 +45,40 @@ des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
     {
       tmp[i] = *in ^ *iv;
     }
-  three_des_crypt (tmp, out, schedule);
+  if (triple == 1)
+    {
+      three_des_crypt (tmp, out, schedule);
+    }
+  else
+    {
+      des_crypt (tmp, out, schedule[0]);
+    }
   in_len -= DES_BLOCK_SIZE;
   out_len -= DES_BLOCK_SIZE;
   if (in_len > 0 && out_len >= DES_BLOCK_SIZE)
     {
-      i += des_encrypt_cbc (in, in_len, out + DES_BLOCK_SIZE, out_len, out,
-			    schedule);
+      i +=
+	des_encrypt_cbc (in, in_len, out + DES_BLOCK_SIZE, out_len, out,
+			 schedule, triple);
     }
   return i;
+}
+
+static int
+mac (ykneomgr_dev * dev, const unsigned char *in, size_t inlen,
+     unsigned char *out)
+{
+  if (inlen > 8)
+    {
+      unsigned char *tmp = malloc (inlen - 8);
+      des_encrypt_cbc (in, inlen - 8, tmp, inlen - 8, dev->icv, dev->macKey,
+		       0);
+      memcpy (dev->icv, tmp + inlen - 16, 8);	/* copy last 8 bytes */
+      dev->icv[5] ^= 0x80;
+      free (tmp);
+    }
+  return des_encrypt_cbc (in + inlen - 8, 8, out, 8, dev->icv, dev->macKey,
+			  1);
 }
 
 ykneomgr_rc
@@ -68,6 +93,10 @@ backend_init (ykneomgr_dev * d)
 	printf ("SCardEstablishContext %ld\n", (long) result);
       return YKNEOMGR_BACKEND_ERROR;
     }
+
+  d->mac = 0;
+  d->encrypt = 0;
+  memset (d->icv, 0, 8);
 
   return YKNEOMGR_OK;
 }
@@ -171,7 +200,6 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   uint8_t recv[256], send[256];
   size_t recvlen = sizeof (recv);
   unsigned char buf[16], tmp[16], iv[DES_BLOCK_SIZE], raw_key[24];
-  unsigned char sessionkey[16], mackey[16];
   unsigned char schedule[3][16][6];
   int i;
 
@@ -202,8 +230,9 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[1] = 0x82;
   buf[2] = recv[12];
   buf[3] = recv[13];
-  des_encrypt_cbc (buf, sizeof (buf), sessionkey, sizeof (sessionkey), iv,
-		   schedule);
+  des_encrypt_cbc (buf, sizeof (buf), raw_key, 16, iv, schedule, 1);
+  memcpy (raw_key + 16, raw_key, 8);
+  three_des_key_setup (raw_key, dev->encKey, DES_ENCRYPT);
 
   memset (iv, 0, sizeof (iv));
   memset (buf, 0, sizeof (buf));
@@ -211,7 +240,9 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[1] = 0x01;
   buf[2] = recv[12];
   buf[3] = recv[13];
-  des_encrypt_cbc (buf, sizeof (buf), mackey, sizeof (mackey), iv, schedule);
+  des_encrypt_cbc (buf, sizeof (buf), raw_key, 16, iv, schedule, 1);
+  memcpy (raw_key + 16, raw_key, 8);
+  three_des_key_setup (raw_key, dev->macKey, DES_ENCRYPT);
 
   memset (iv, 0, sizeof (iv));
   memcpy (buf, initUpdate + 5, 8);	/* our "random" challenge */
@@ -219,15 +250,12 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[9] = recv[13];
   memcpy (buf + 10, recv + 14, 6);	/* the card challenge */
 
-  memcpy (raw_key, sessionkey, 16);
-  memcpy (raw_key + 16, sessionkey, 8);
-  three_des_key_setup (raw_key, schedule, DES_ENCRYPT);
-  three_des_crypt (buf, tmp, schedule);
+  three_des_crypt (buf, tmp, dev->encKey);
   for (i = 0; i < 8; i++)
     tmp[i] ^= buf[i + 8];
-  three_des_crypt (tmp, buf, schedule);
+  three_des_crypt (tmp, buf, dev->encKey);
   buf[0] ^= 0x80;
-  three_des_crypt (buf, tmp, schedule);
+  three_des_crypt (buf, tmp, dev->encKey);
 
   if (memcmp (tmp, recv + 20, DES_BLOCK_SIZE) != 0)
     {
@@ -239,12 +267,12 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   memcpy (buf + 2, recv + 14, 6);
   memcpy (buf + 8, initUpdate + 5, 8);
 
-  three_des_crypt (buf, tmp, schedule);
+  three_des_crypt (buf, tmp, dev->encKey);
   for (i = 0; i < 8; i++)
     tmp[i] ^= buf[i + 8];
-  three_des_crypt (tmp, buf, schedule);
+  three_des_crypt (tmp, buf, dev->encKey);
   buf[0] ^= 0x80;
-  three_des_crypt (buf, tmp, schedule);
+  three_des_crypt (buf, tmp, dev->encKey);
 
   memset (send, 0, sizeof (send));
   send[0] = 0x84;
@@ -254,15 +282,7 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   send[4] = 0x10;
   memcpy (send + 5, tmp, DES_BLOCK_SIZE);
 
-  memcpy (raw_key, mackey, 16);
-  memcpy (raw_key + 16, mackey, 8);
-  three_des_key_setup (raw_key, schedule, DES_ENCRYPT);
-
-  des_crypt (send, tmp, schedule[0]);
-  for (i = 0; i < 8; i++)
-    tmp[i] ^= send[i + 8];
-  tmp[5] ^= 0x80;
-  three_des_crypt (tmp, send + 5 + 8, schedule);
+  mac (dev, send, 16, send + 5 + 8);
 
   if (backend_apdu (dev, send, 5 + 16, recv, &recvlen) != YKNEOMGR_OK)
     {

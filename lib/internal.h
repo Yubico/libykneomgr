@@ -48,6 +48,11 @@ struct ykneomgr_dev
 #if BACKEND_PCSC || BACKEND_WINSCARD
   SCARDCONTEXT card;
   SCARDHANDLE cardHandle;
+  unsigned char macKey[3][16][6];
+  unsigned char encKey[3][16][6];
+  unsigned char icv[8];
+  int mac;
+  int encrypt;
 #endif
   int card_connected;
   uint8_t versionMajor, versionMinor, versionBuild, pgmSeq, mode, crTimeout;
