@@ -1,14 +1,14 @@
-# Copyright (C) 2013 Yubico AB
+# Copyright (C) 2013-2014 Yubico AB
 #
-# This library is free software; you can redistribute it and/or modify
+# This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as
-# published by the Free Software Foundation; either version 2.1 of the
+# published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
 #
-# This library is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -17,6 +17,7 @@ SUBDIRS = ykneomgr
 
 AM_CFLAGS = $(WARN_CFLAGS)
 AM_CPPFLAGS = -I$(srcdir)/ykneomgr -I$(builddir)/ykneomgr
+AM_CPPFLAGS += -I$(top_srcdir)/gl -I$(top_builddir)/gl
 AM_CPPFLAGS += $(GLOBALPLATFORM_CFLAGS) $(PCSC_CFLAGS) $(LIBZIP_CFLAGS)
 
 lib_LTLIBRARIES = libykneomgr.la
@@ -34,6 +35,7 @@ endif
 
 libykneomgr_la_LIBADD = $(GLOBALPLATFORM_LIBS) $(PCSC_LIBS) $(LTLIBWINSCARD)
 libykneomgr_la_LIBADD += $(PCSC_MACOSX_LIBS) $(LIBZIP_LIBS)
+libykneomgr_la_LIBADD += ../gl/libgnu.la
 libykneomgr_la_LDFLAGS = -no-undefined \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 
