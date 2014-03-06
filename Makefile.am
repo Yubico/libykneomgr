@@ -20,36 +20,3 @@ ACLOCAL_AMFLAGS = -I m4 -I gl/m4
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
 EXTRA_DIST = windows.mk macosx.mk
-
-# Maintainer rules
-
-indent:
-	indent `find . -name \*.c -o -name \*.h -o -name \*.h.in`
-	indent `find . -name \*.c -o -name \*.h -o -name \*.h.in`
-
-ChangeLog:
-	cd $(srcdir) && git2cl > ChangeLog
-
-release:
-	@if test -z "$(KEYID)"; then \
-		echo "Try this instead:"; \
-		echo "  make release KEYID=[PGPKEYID]"; \
-		echo "For example:"; \
-		echo "  make release KEYID=2117364A"; \
-		exit 1; \
-	fi
-	@if test ! -d "$(YUBICO_GITHUB_REPO)"; then \
-		echo "yubico.github.com repo not found!"; \
-		echo "Make sure that YUBICO_GITHUB_REPO is set"; \
-		exit 1; \
-	fi
-	@head -3 $(srcdir)/NEWS | grep -q "Version $(VERSION) .released `date -I`" || \
-		(echo 'error: You need to update date/version in $(srcdir)/NEWS'; exit 1)
-	rm -f $(srcdir)/ChangeLog
-	make ChangeLog distcheck
-	gpg --detach-sign --default-key $(KEYID) $(PACKAGE)-$(VERSION).tar.gz
-	gpg --verify $(PACKAGE)-$(VERSION).tar.gz.sig
-	cd $(srcdir) && git push
-	cd $(srcdir) && git tag -u $(KEYID) -m $(VERSION) $(PACKAGE)-$(VERSION)
-	cd $(srcdir) && git push --tags
-	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION).tar.gz*

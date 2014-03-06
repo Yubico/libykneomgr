@@ -51,12 +51,14 @@ AC_DEFUN([gl_EARLY],
   # Code from module frexp-nolibm:
   # Code from module frexpl-nolibm:
   # Code from module fseterr:
+  # Code from module gnumakefile:
   # Code from module havelib:
   # Code from module include_next:
   # Code from module isnand-nolibm:
   # Code from module isnanf-nolibm:
   # Code from module isnanl-nolibm:
   # Code from module lib-symbol-versions:
+  # Code from module maintainer-makefile:
   # Code from module manywarnings:
   # Code from module math:
   # Code from module memchr:
@@ -77,7 +79,9 @@ AC_DEFUN([gl_EARLY],
   # Code from module stdio:
   # Code from module string:
   # Code from module sys_types:
+  # Code from module useless-if-before-free:
   # Code from module vasnprintf:
+  # Code from module vc-list-files:
   # Code from module verify:
   # Code from module vfprintf-posix:
   # Code from module warnings:
@@ -123,6 +127,16 @@ AC_DEFUN([gl_INIT],
   if test $ac_cv_func___fseterr = no; then
     AC_LIBOBJ([fseterr])
   fi
+  # Autoconf 2.61a.99 and earlier don't support linking a file only
+  # in VPATH builds.  But since GNUmakefile is for maintainer use
+  # only, it does not matter if we skip the link with older autoconf.
+  # Automake 1.10.1 and earlier try to remove GNUmakefile in non-VPATH
+  # builds, so use a shell variable to bypass this.
+  GNUmakefile=GNUmakefile
+  m4_if(m4_version_compare([2.61a.100],
+          m4_defn([m4_PACKAGE_VERSION])), [1], [],
+        [AC_CONFIG_LINKS([$GNUmakefile:$GNUmakefile], [],
+          [GNUmakefile=$GNUmakefile])])
   gl_FUNC_ISNAND_NO_LIBM
   if test $gl_func_isnand_no_libm != yes; then
     AC_LIBOBJ([isnand])
@@ -139,6 +153,9 @@ AC_DEFUN([gl_INIT],
     gl_PREREQ_ISNANL
   fi
   gl_LD_VERSION_SCRIPT
+  AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
+    [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
+  AC_REQUIRE([AC_PROG_SED])
   gl_MATH_H
   gl_FUNC_MEMCHR
   if test $HAVE_MEMCHR = 0 || test $REPLACE_MEMCHR = 1; then
@@ -312,6 +329,8 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/snippet/arg-nonnull.h
   build-aux/snippet/c++defs.h
   build-aux/snippet/warn-on-use.h
+  build-aux/useless-if-before-free
+  build-aux/vc-list-files
   lib/alloca.in.h
   lib/asnprintf.c
   lib/errno.in.h
@@ -418,4 +437,6 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/wchar_t.m4
   m4/wint_t.m4
   m4/xsize.m4
+  top/GNUmakefile
+  top/maint.mk
 ])
