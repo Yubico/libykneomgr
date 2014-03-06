@@ -48,7 +48,7 @@ glimport:
 ChangeLog:
 	cd $(srcdir) && git2cl > ChangeLog
 
-release:
+my-release:
 	@if test -z "$(KEYID)"; then \
 		echo "Try this instead:"; \
 		echo "  make release KEYID=[PGPKEYID]"; \
@@ -71,3 +71,5 @@ release:
 	cd $(srcdir) && git tag -u $(KEYID) -m $(VERSION) $(PACKAGE)-$(VERSION)
 	cd $(srcdir) && git push --tags
 	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION).tar.gz*
+
+release: my-release
