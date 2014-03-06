@@ -19,7 +19,6 @@
 
 #include <stddef.h>
 
-#define _GNU_SOURCE
 #include <string.h>
 
 /* From http://article.gmane.org/gmane.os.freebsd.devel.hackers/23606 */
