@@ -77,19 +77,15 @@ This will create a directory 'libykneomgr'.  Enter the directory:
   cd libykneomgr
 
 Recent versions of autoconf, automake and libtool must be installed.
-Help2man is used to generate the manpages.  Gengetopt is needed for
-command line parameter handling.
+Libzip is required by the library.  Help2man is used to generate the
+manpages.  GTK-DOC is used to generated API documentation.  Gengetopt
+is needed for command line parameter handling.
 
-Generate the build system using:
+Build the project using:
 
-  autoreconf --install
+  make
 
-Then you follow the normal build instructions, see above.
-
-For developers, it is recommended to build with GTK-DOC enabled (so
-that "make dist" works) and to enable GCC warnings.
-
-  ./configure --enable-gtk-doc  --enable-gtk-doc-pdf --enable-gcc-warnings
+See cfg.mk for some settings.
 
 Portability
 -----------
