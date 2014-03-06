@@ -15,6 +15,7 @@
 
 AC_INIT([libykneomgr], [0.0.2], [yubico-devel@googlegroups.com])
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 
 # http://www.gnu.org/s/libtool/manual/html_node/Updating-version-info.html

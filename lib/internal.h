@@ -18,6 +18,8 @@
 #ifndef INTERNAL_H
 #define INTERNAL_H
 
+#include "config.h"
+
 #include <ykneomgr/ykneomgr.h>
 
 #include <stdio.h>

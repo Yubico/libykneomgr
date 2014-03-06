@@ -17,6 +17,7 @@ SUBDIRS = ykneomgr
 
 AM_CFLAGS = $(WARN_CFLAGS)
 AM_CPPFLAGS = -I$(srcdir)/ykneomgr -I$(builddir)/ykneomgr
+AM_CPPFLAGS += -I$(top_srcdir)/gl -I$(top_builddir)/gl
 AM_CPPFLAGS += $(GLOBALPLATFORM_CFLAGS) $(PCSC_CFLAGS) $(LIBZIP_CFLAGS)
 
 lib_LTLIBRARIES = libykneomgr.la
@@ -34,6 +35,7 @@ endif
 
 libykneomgr_la_LIBADD = $(GLOBALPLATFORM_LIBS) $(PCSC_LIBS) $(LTLIBWINSCARD)
 libykneomgr_la_LIBADD += $(PCSC_MACOSX_LIBS) $(LIBZIP_LIBS)
+libykneomgr_la_LIBADD += ../gl/libgnu.la
 libykneomgr_la_LDFLAGS = -no-undefined \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 

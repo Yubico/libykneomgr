@@ -14,13 +14,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AM_CFLAGS = $(WARN_CFLAGS)
-AM_CPPFLAGS=-I$(top_srcdir)/lib -I$(top_builddir)/lib
+AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib
+AM_CPPFLAGS += -I$(top_srcdir)/gl -I$(top_builddir)/gl
 
 bin_PROGRAMS = ykneomgr
 
 ykneomgr_SOURCES = ykneomgr.c
 ykneomgr_SOURCES += cmdline.ggo cmdline.c cmdline.h
-ykneomgr_LDADD = ../lib/libykneomgr.la
+ykneomgr_LDADD = ../gl/libgnu.la ../lib/libykneomgr.la
 
 cmdline.c cmdline.h: cmdline.ggo Makefile.am
 	gengetopt --no-handle-help --input $^
