@@ -51,15 +51,15 @@ case "$with_backend$host" in
     with_backend=winscard ;;
 esac
 
+if test "x$with_backend" = xcheck || test "x$with_backend" = xpcsc; then
+  PKG_CHECK_MODULES([PCSC], [libpcsclite],
+                    [with_backend=pcsc], [:])
+fi
+
 if test "x$with_backend" = xcheck \
    || test "x$with_backend" = xglobalplatform; then
   PKG_CHECK_MODULES([GLOBALPLATFORM], [globalplatform],
                     [with_backend=globalplatform], [:])
-fi
-
-if test "x$with_backend" = xcheck || test "x$with_backend" = xpcsc; then
-  PKG_CHECK_MODULES([PCSC], [libpcsclite],
-                    [with_backend=pcsc], [:])
 fi
 
 if test "x$with_backend" = xcheck; then

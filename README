@@ -34,24 +34,19 @@ follows.
 The backend to use is decided at compile time, see the summary at the
 end of the ./configure output.  Use --with-backend=foo to chose
 backend, replacing foo with the backend you want to use.  The default
-and recommended backend is "globalplatform" which will be selected if
-present.  The other backends "pcsc", "macscard", and "winscard" uses
+and recommended backend is "pcsc" which will be selected if
+present.  The backends "pcsc", "macscard", and "winscard" uses
 the PCSC interface, with slightly different shared library linkage and
 header file names: "pcsc" is used under GNU-like systems, "macscard"
 under Mac OS X, and "winscard" is used under Windows.  In most
 situations, running ./configure should automatically find the proper
 backend to use.
+There is also a backend "globalplatform" available that will use
+libglobalplatform to perform operations.
 
-Warning!  Currently the "pcsc"/"macscard"/"winscard" have no support
-for listing, deleting and installing applets.  These functions will
-result in an error.  This limitation will be removed when an
-implementation of the Global Platform Security Protocol (version 2
-mode 55) using native PCSC is added.
+To force building using the globaleplatform interface, you would use:
 
-To force building using the PCSC interface even though GlobalPlatform
-is availble, you would use:
-
-  ./configure --with-backend=pcsc
+  ./configure --with-backend=globalplatform
 
 Usage
 -----
