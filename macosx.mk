@@ -47,6 +47,7 @@ doit:
 	rm -f $(PWD)/tmp$(ARCH)/root/bin/zipcmp $(PWD)/tmp$(ARCH)/root/bin/zipmerge $(PWD)/tmp$(ARCH)/root/bin/ziptorrent && \
 	rm -rf $(PWD)/tmp/root/lib/pkgconfig/ && \
 	install_name_tool -id @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/lib/libzip.2.dylib && \
+	install_name_tool -change $(PWD)/tmp/root/lib/libzip.2.dylib @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/lib/libykneomgr.0.dylib && \
 	install_name_tool -change $(PWD)/tmp/root/lib/libzip.2.dylib @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/bin/ykneomgr && \
 	install_name_tool -id @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/lib/libykneomgr.0.dylib && \
 	install_name_tool -change $(PWD)/tmp/root/lib/libykneomgr.0.dylib @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/bin/ykneomgr && \
