@@ -36,6 +36,7 @@
 #else
 #include <winscard.h>
 #endif
+#include "des.h"
 #endif
 
 extern int debug;
@@ -50,8 +51,9 @@ struct ykneomgr_dev
 #if BACKEND_PCSC || BACKEND_WINSCARD
   SCARDCONTEXT card;
   SCARDHANDLE cardHandle;
-  unsigned char macKey[3][16][6];
-  unsigned char encKey[3][16][6];
+  gl_des_ctx macDesKey;
+  gl_3des_ctx mac3DesKey;
+  gl_3des_ctx enc3DesKey;
   unsigned char icv[8];
   int mac;
   int encrypt;
