@@ -30,7 +30,7 @@ if BACKEND_GLOBALPLATFORM
 libykneomgr_la_SOURCES += backend_globalplatform.c
 endif
 if BACKEND_PCSC
-libykneomgr_la_SOURCES += backend_pcsc.c des.c des.h
+libykneomgr_la_SOURCES += backend_pcsc.c
 endif
 
 libykneomgr_la_LIBADD = $(GLOBALPLATFORM_LIBS) $(PCSC_LIBS) $(LTLIBWINSCARD)
