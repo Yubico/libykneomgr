@@ -28,6 +28,8 @@ gl/arg-nonnull.h
 gl/asnprintf.lo
 gl/asnprintf.o
 gl/c++defs.h
+gl/des.lo
+gl/des.o
 gl/dummy.o
 gl/fseterr.lo
 gl/fseterr.o
