@@ -40,6 +40,7 @@ AC_DEFUN([gl_EARLY],
   AC_REQUIRE([gl_PROG_AR_RANLIB])
   # Code from module absolute-header:
   # Code from module alloca-opt:
+  # Code from module crypto/des:
   # Code from module errno:
   # Code from module extensions:
   AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
@@ -74,6 +75,7 @@ AC_DEFUN([gl_EARLY],
   # Code from module snippet/c++defs:
   # Code from module snippet/warn-on-use:
   # Code from module ssize_t:
+  # Code from module stdbool:
   # Code from module stddef:
   # Code from module stdint:
   # Code from module stdio:
@@ -178,6 +180,7 @@ AC_DEFUN([gl_INIT],
   gl_MATH_MODULE_INDICATOR([signbit])
   gl_SIZE_MAX
   gt_TYPE_SSIZE_T
+  AM_STDBOOL_H
   gl_STDDEF_H
   gl_STDINT_H
   gl_STDIO_H
@@ -333,6 +336,8 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/vc-list-files
   lib/alloca.in.h
   lib/asnprintf.c
+  lib/des.c
+  lib/des.h
   lib/errno.in.h
   lib/float+.h
   lib/float.c
@@ -367,6 +372,7 @@ AC_DEFUN([gl_FILE_LIST], [
   lib/signbitf.c
   lib/signbitl.c
   lib/size_max.h
+  lib/stdbool.in.h
   lib/stddef.in.h
   lib/stdint.in.h
   lib/stdio-impl.h
@@ -423,6 +429,7 @@ AC_DEFUN([gl_FILE_LIST], [
   m4/signbit.m4
   m4/size_max.m4
   m4/ssize_t.m4
+  m4/stdbool.m4
   m4/stddef_h.m4
   m4/stdint.m4
   m4/stdint_h.m4
