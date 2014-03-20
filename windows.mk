@@ -45,6 +45,7 @@ doit:
 	lt_cv_deplibs_check_method=pass_all ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --with-zlib=$(PWD)/tmp$(ARCH)/root && \
 	make install && \
 	rm -f $(PWD)/tmp$(ARCH)/root/bin/zipcmp.exe $(PWD)/tmp$(ARCH)/root/bin/zipmerge.exe $(PWD)/tmp$(ARCH)/root/bin/ziptorrent.exe && \
+	rm -rf $(PWD)/tmp$(ARCH)/root/share/ && \
 	cp LICENSE $(PWD)/tmp$(ARCH)/root/licenses/libzip.txt && \
 	cd .. && \
 	cp ../$(PACKAGE)-$(VERSION).tar.gz . && \
