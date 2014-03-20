@@ -49,11 +49,13 @@ des_encrypt_cbc (const unsigned char *in, size_t in_len, unsigned char *out,
     }
   if (triple == 1)
     {
-      gl_3des_ecb_encrypt ((gl_3des_ctx *)ctx, (const char *)tmp, (char *)out);
+      gl_3des_ecb_encrypt ((gl_3des_ctx *) ctx, (const char *) tmp,
+			   (char *) out);
     }
   else
     {
-      gl_des_ecb_encrypt ((gl_des_ctx*)ctx, (const char *)tmp, (char *)out);
+      gl_des_ecb_encrypt ((gl_des_ctx *) ctx, (const char *) tmp,
+			  (char *) out);
     }
   in_len -= DES_BLOCK_SIZE;
   out_len -= DES_BLOCK_SIZE;
@@ -73,8 +75,8 @@ mac (ykneomgr_dev * dev, const unsigned char *in, size_t inlen,
   if (inlen > 8)
     {
       unsigned char *tmp = malloc (inlen - 8);
-      des_encrypt_cbc (in, inlen - 8, tmp, inlen - 8, dev->icv, &dev->macDesKey,
-		       0);
+      des_encrypt_cbc (in, inlen - 8, tmp, inlen - 8, dev->icv,
+		       &dev->macDesKey, 0);
       memcpy (dev->icv, tmp + inlen - 16, 8);	/* copy last 8 bytes */
       dev->icv[5] ^= 0x80;
       free (tmp);
@@ -222,7 +224,7 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
       return YKNEOMGR_BACKEND_ERROR;
     }
 
-  gl_3des_set2keys (&ctx, (const char *)key, (const char *)(key + 8));
+  gl_3des_set2keys (&ctx, (const char *) key, (const char *) (key + 8));
 
   memset (iv, 0, sizeof (iv));
   memset (buf, 0, sizeof (buf));
@@ -231,8 +233,8 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[2] = recv[12];
   buf[3] = recv[13];
   des_encrypt_cbc (buf, sizeof (buf), key_buf, 16, iv, &ctx, 1);
-  gl_3des_set2keys (&dev->enc3DesKey,
-		    (const char *)key_buf, (const char *)(key_buf + 8));
+  gl_3des_set2keys (&dev->enc3DesKey, (const char *) key_buf,
+		    (const char *) (key_buf + 8));
 
   memset (iv, 0, sizeof (iv));
   memset (buf, 0, sizeof (buf));
@@ -241,9 +243,9 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[2] = recv[12];
   buf[3] = recv[13];
   des_encrypt_cbc (buf, sizeof (buf), key_buf, 16, iv, &ctx, 1);
-  gl_des_setkey (&dev->macDesKey, (const char *)key_buf);
-  gl_3des_set2keys (&dev->mac3DesKey,
-		    (const char *)key_buf, (const char *)(key_buf + 8));
+  gl_des_setkey (&dev->macDesKey, (const char *) key_buf);
+  gl_3des_set2keys (&dev->mac3DesKey, (const char *) key_buf,
+		    (const char *) (key_buf + 8));
 
   memset (iv, 0, sizeof (iv));
   memcpy (buf, initUpdate + 5, 8);	/* our "random" challenge */
@@ -251,12 +253,12 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[9] = recv[13];
   memcpy (buf + 10, recv + 14, 6);	/* the card challenge */
 
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)buf, (char *)tmp);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) buf, (char *) tmp);
   for (i = 0; i < 8; i++)
     tmp[i] ^= buf[i + 8];
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)tmp, (char *)buf);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) tmp, (char *) buf);
   buf[0] ^= 0x80;
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)buf, (char *)tmp);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) buf, (char *) tmp);
 
   if (memcmp (tmp, recv + 20, DES_BLOCK_SIZE) != 0)
     {
@@ -268,12 +270,12 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   memcpy (buf + 2, recv + 14, 6);
   memcpy (buf + 8, initUpdate + 5, 8);
 
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)buf, (char *)tmp);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) buf, (char *) tmp);
   for (i = 0; i < 8; i++)
     tmp[i] ^= buf[i + 8];
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)tmp, (char *)buf);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) tmp, (char *) buf);
   buf[0] ^= 0x80;
-  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *)buf, (char *)tmp);
+  gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) buf, (char *) tmp);
 
   memset (send, 0, sizeof (send));
   send[0] = 0x84;
