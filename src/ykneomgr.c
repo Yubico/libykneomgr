@@ -187,6 +187,51 @@ doit (struct gengetopt_args_info *args_info, uint8_t mode,
 
       free (str);
     }
+  else if (args_info->send_apdu_given)
+    {
+      size_t j;
+      for (j = 0; j < args_info->send_apdu_given; j++)
+	{
+	  char *arg = *(args_info->send_apdu_arg++);
+	  size_t k;
+	  uint8_t send[0xff];
+	  uint8_t *sendptr = send;
+	  uint8_t recv[0xff];
+	  size_t recvlen = sizeof (recv);
+
+	  while (*arg != '\0')
+	    {
+	      int scanned = 0;
+	      int res = sscanf (arg, "%2hhx%n", sendptr++, &scanned);
+	      if (sendptr - send == sizeof (send))
+		{
+		  printf
+		    ("error: apdu argument to long, maximum %zu bytes allowed.\n",
+		     sizeof (send));
+		}
+	      arg += scanned;
+	      if (res < 1)
+		{
+		  printf ("error: failed parsing apdu.\n");
+		  return EXIT_FAILURE;
+		}
+	    }
+	  rc = ykneomgr_send_apdu (dev, send, sendptr - send, recv, &recvlen);
+	  if (rc != YKNEOMGR_OK)
+	    {
+	      printf ("error: ykneomgr_send_apdu (%d): %s\n",
+		      rc, ykneomgr_strerror (rc));
+	      return EXIT_FAILURE;
+	    }
+	  printf ("reply: ");
+	  for (k = 0; k < recvlen; k++)
+	    {
+	      printf ("%02x ", recv[k]);
+	    }
+	  printf ("\n");
+
+	}
+    }
 
   ykneomgr_done (dev);
 
@@ -203,6 +248,7 @@ main (int argc, char *argv[])
 #define AIDMAXLEN 16
   uint8_t deleteaid[AIDMAXLEN] = { '\x00' };
   size_t deleteaidlen = 0;
+  int send_apdu;
 
   if (cmdline_parser (argc, argv, &args_info) != 0)
     exit (EXIT_FAILURE);
@@ -214,17 +260,25 @@ main (int argc, char *argv[])
 	  && !args_info.applet_install_given
 	  && !args_info.get_mode_given
 	  && !args_info.get_version_given
-	  && !args_info.get_serialno_given && !args_info.set_mode_given))
+	  && !args_info.get_serialno_given && !args_info.set_mode_given
+	  && !args_info.send_apdu_given))
     {
       cmdline_parser_print_help ();
       printf ("\nReport bugs at <" PACKAGE_BUGREPORT ">.\n");
       exit (EXIT_SUCCESS);
     }
 
+  /* since send_apdu is a multiple _given might have a higher value */
+  if (args_info.send_apdu_given)
+    {
+      send_apdu = 1;
+    }
+
   if (args_info.list_readers_given + args_info.applet_list_given
       + args_info.applet_delete_given + args_info.applet_install_given
       + args_info.get_mode_given + args_info.get_version_given
-      + args_info.get_serialno_given + args_info.set_mode_given > 1)
+      + args_info.get_serialno_given + args_info.set_mode_given + send_apdu >
+      1)
     {
       fprintf (stderr, "%s: too many parameters\n", argv[0]);
       exit (EXIT_FAILURE);
