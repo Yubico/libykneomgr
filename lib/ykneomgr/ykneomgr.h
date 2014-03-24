@@ -63,6 +63,10 @@ extern "C"
   extern ykneomgr_rc ykneomgr_applet_install (ykneomgr_dev * dev,
 					      const char *capfile);
 
+  extern ykneomgr_rc ykneomgr_send_apdu (ykneomgr_dev * dev,
+					 const uint8_t * send, size_t sendlen,
+					 uint8_t * recv, size_t * recvlen);
+
 #ifdef __cplusplus
 }
 #endif

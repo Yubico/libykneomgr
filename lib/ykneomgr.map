@@ -40,3 +40,9 @@ YKNEOMGR_0.0.0
   local:
     *;
 };
+
+YKNEOMGR_0.1.0
+{
+  global:
+    ykneomgr_send_apdu;
+} YKNEOMGR_0.0.0;

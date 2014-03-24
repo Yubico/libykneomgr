@@ -413,3 +413,24 @@ ykneomgr_applet_install (ykneomgr_dev * dev, const char *capfile)
 {
   return backend_applet_install (dev, capfile);
 }
+
+/**
+ * ykneomgr_send_apdu:
+ * @dev: a #ykneomgr_dev device handle.
+ * @send: apdu to send
+ * @sendlen: length of send buffer
+ * @recv: response apdu
+ * @recvlen: length of recv buffer
+ *
+ * Send an arbitrary apdu to the device.
+ *
+ * Returns: On success, %YKNEOMGR_OK (integer 0) is returned, or
+ *   another #ykneomgr_rc error code.
+ *   @recvlen will be set to the length of the data in @recv.
+ */
+ykneomgr_rc
+ykneomgr_send_apdu (ykneomgr_dev * dev, const uint8_t * send, size_t sendlen,
+		    uint8_t * recv, size_t * recvlen)
+{
+  return backend_apdu (dev, send, sendlen, recv, recvlen);
+}
