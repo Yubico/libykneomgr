@@ -44,7 +44,7 @@ backend to use.
 There is also a backend "globalplatform" available that will use
 libglobalplatform to perform operations.
 
-To force building using the globaleplatform interface, you would use:
+To force building using the globalplatform interface, you would use:
 
   ./configure --with-backend=globalplatform
 
