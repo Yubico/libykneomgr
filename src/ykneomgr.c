@@ -248,7 +248,7 @@ main (int argc, char *argv[])
 #define AIDMAXLEN 16
   uint8_t deleteaid[AIDMAXLEN] = { '\x00' };
   size_t deleteaidlen = 0;
-  int send_apdu;
+  int send_apdu = 0;
 
   if (cmdline_parser (argc, argv, &args_info) != 0)
     exit (EXIT_FAILURE);
@@ -269,7 +269,7 @@ main (int argc, char *argv[])
     }
 
   /* since send_apdu is a multiple _given might have a higher value */
-  if (args_info.send_apdu_given)
+  if (args_info.send_apdu_given > 0)
     {
       send_apdu = 1;
     }
