@@ -1,6 +1,12 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.1.0 (unreleased)
+* Version 0.1.0 (released 2014-03-25)
+
+** libykneomgr: Switch to des implementation from gnulib.
+
+** libykneomgr: add ykneomgr_send_apdu() function
+
+** Add --send-apdu to ykneomgr as a multiple option
 
 * Version 0.0.2 (released 2014-03-06)
 
