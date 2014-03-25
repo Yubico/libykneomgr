@@ -208,6 +208,8 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   gl_3des_ctx ctx;
   int i;
 
+  memset (dev->icv, 0, sizeof (dev->icv));
+
   if (backend_apdu (dev, selectApdu, sizeof (selectApdu), recv, &recvlen) !=
       YKNEOMGR_OK)
     {
