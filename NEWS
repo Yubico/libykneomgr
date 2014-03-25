@@ -1,6 +1,8 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.1.1 (unreleased)
+* Version 0.1.1 (released 2014-03-25)
+
+** Fix broken CLI tool from last release.
 
 * Version 0.1.0 (released 2014-03-25)
 
