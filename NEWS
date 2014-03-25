@@ -1,5 +1,7 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
+* Version 0.1.1 (unreleased)
+
 * Version 0.1.0 (released 2014-03-25)
 
 ** libykneomgr: Switch to des implementation from gnulib.
