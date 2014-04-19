@@ -16,18 +16,18 @@
 [EXAMPLES]
 
 To display the firmware version of a connected YubiKey NEO you use the
---get-version or -w parameter.  Typical output would be the string "3.0.4".
+\-\-get-version or \-w parameter.  Typical output would be the string "3.0.4".
 
-  ykneomgr --get-version
+  ykneomgr \-\-get-version
 
-To display the serial number you would use the --get-serialno or -s
+To display the serial number you would use the \-\-get\-serialno or \-s
 parameter.
 
-  ykneomgr --get-serialno
+  ykneomgr \-\-get\-serialno
 
-To display the device mode you use the --get-mode or -m parameter.
+To display the device mode you use the \-\-get\-mode or \-m parameter.
 
-  ykneomgr --get-mode
+  ykneomgr \-\-get\-mode
 
 The possible modes are 0 for HID device only, 1 for CCID device only,
 2 for HID/CCID composite device.  For the CCID modes (i.e., 1 and 2),
@@ -36,75 +36,75 @@ YubiKey button will trigger eject/insert of the smartcard.  That is,
 81 means CCID device only with touch eject/insert, and 82 means
 HID/CCID composite device with touch eject/insert.
 
-To mode switch the NEO into OTP-only mode, you use the --set-mode or
--M parameter with mode 0.  Note that you have to eject the YubiKey NEO
-and re-insert it before it changes mode.
+To mode switch the NEO into OTP\(hyonly mode, you use the \-\-set\-mode or
+\-M parameter with mode 0.  Note that you have to eject the YubiKey NEO
+and re\(hyinsert it before it changes mode.
 
-   ykneomgr --set-mode 0
+   ykneomgr \-\-set\-mode 0
 
-To mode switch the NEO into CCID-only mode, you use the --set-mode or
--M parameter with mode 1.  Note that you have to eject the YubiKey NEO
-and re-insert it before it changes mode.
+To mode switch the NEO into CCID\(hyonly mode, you use the
+\-\-set\-mode or \-M parameter with mode 1.  Note that you have to
+eject the YubiKey NEO and re\(hyinsert it before it changes mode.
 
-   ykneomgr --set-mode 1
+   ykneomgr \-\-set\-mode 1
 
 To mode switch the NEO into hybrid OTP/CCID composite mode, you use
-the --set-mode or -M parameter with mode 2.  Note that you have to
-eject the YubiKey NEO and re-insert it before it changes mode.
+the \-\-set\-mode or \-M parameter with mode 2.  Note that you have to
+eject the YubiKey NEO and re\(hyinsert it before it changes mode.
 
-   ykneomgr --set-mode 2
+   ykneomgr \-\-set\-mode 2
 
-To mode switch the NEO into CCID-only mode, with the touch button
-acting as eject/insert of the card, you use the --set-mode or -M
+To mode switch the NEO into CCID\(hyonly mode, with the touch button
+acting as eject/insert of the card, you use the \-\-set\-mode or \-M
 parameter with mode 81.  Note that you have to eject the YubiKey NEO
-and re-insert it before it changes mode.
+and re\(hyinsert it before it changes mode.
 
-   ykneomgr --set-mode 81
+   ykneomgr \-\-set\-mode 81
 
 To mode switch the NEO into hybrid OTP/CCID composite mode, with the
 touch button acting as eject/insert of the card, you use the
---set-mode or -M parameter with mode 82.  Note that you have to eject
-the YubiKey NEO and re-insert it before it changes mode.
+\-\-set\-mode or \-M parameter with mode 82.  Note that you have to eject
+the YubiKey NEO and re\(hyinsert it before it changes mode.
 
-   ykneomgr --set-mode 82
+   ykneomgr \-\-set\-mode 82
 
-To list the connected readers you use the --list-readers or -l
+To list the connected readers you use the \-\-list\-readers or \-l
 parameter.
 
-   ykneomgr --list-readers
+   ykneomgr \-\-list\-readers
 
-To list the available applets on the device you use the --applet-list
-or -a parameter.  The output is a list of AIDs identifying applets.
+To list the available applets on the device you use the \-\-applet\-list
+or \-a parameter.  The output is a list of AIDs identifying applets.
 For example, d27600012401 means the OpenPGP applet.
 
-   ykneomgr --applet-list
+   ykneomgr \-\-applet\-list
 
-To delete an applet you use the --applet-delete or -D parameter,
+To delete an applet you use the \-\-applet\-delete or \-D parameter,
 giving it the applet AID as an parameter.  Note that deleting an
 applet may take a second or two to complete.  Warning!  Deleting an
 applet will destroy all storage associated with that applet, including
 any private keys or other credentials.
 
-   ykneomgr --applet-delete d27600012401
+   ykneomgr \-\-applet\-delete d27600012401
 
-To install a CAP file as an applet you use the --applet-install or -i
+To install a CAP file as an applet you use the \-\-applet\-install or \-i
 parameter, giving it the filename of the CAP file applet as a
 parameter.  Note that loading can take several seconds, for typical
 CAP file sizes it takes around 5 seconds.
 
-   ykneomgr --applet-install path/to/applet.cap
+   ykneomgr \-\-applet\-install path/to/applet.cap
 
 [TROBLESHOOTING]
 
-Debug messages are printed if you pass the --debug parameter, which
+Debug messages are printed if you pass the \-\-debug parameter, which
 can be useful for debugging or deeper analysis.
 
 The error "No device found" can be because a number of reasons.  The
 simplest, of course, is that the device really is not connected to the
 machine (USB or NFC).  Another reason may be that it is in a mode
 where "ykneomgr" cannot talk to it.  This can happen if the device is
-in OTP-only mode (mode 0), where you must use the "ykpersonalize" tool
-to mode switch it from the OTP-only mode.  It can also happen if the
+in OTP\(hyonly mode (mode 0), where you must use the "ykpersonalize" tool
+to mode switch it from the OTP\(hyonly mode.  It can also happen if the
 device is in a MODE_FLAG_EJECT mode (i.e., 81 or 82).  If that is the
 case, you must touch the button in order to "insert" the virtual
 smartcard before you can invoke "ykneomgr".

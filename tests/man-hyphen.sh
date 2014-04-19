@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright (C) 2013-2014 Yubico AB
 #
 # This program is free software: you can redistribute it and/or modify
@@ -13,12 +15,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AM_CFLAGS = $(WARN_CFLAGS)
-AM_CPPFLAGS = -I$(top_srcdir)/lib -I$(top_builddir)/lib
+srcdir="${srcdir:-.}"
+manfile="$srcdir/../src/ykneomgr.h2m"
 
-AM_LDFLAGS = -no-install
-LDADD = ../lib/libykneomgr.la
+test -f $manfile || exit 1
 
-check_PROGRAMS = basic
-dist_check_SCRIPTS = man-hyphen.sh
-TESTS = $(check_PROGRAMS) man-hyphen.sh
+! tail -n +2 $manfile | egrep '[^a-z\\]-'

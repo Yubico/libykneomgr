@@ -143,6 +143,10 @@ tests/basic
 tests/basic.log
 tests/basic.o
 tests/basic.trs
+tests/man-hyphen.sh.log
+tests/man-hyphen.sh.trs
 tests/test-suite.log
+tests/tst_hyphen.sh.log
+tests/tst_hyphen.sh.trs
 tmp32/
 tmp64/
