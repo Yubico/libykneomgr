@@ -1,6 +1,6 @@
 Author: Yubico
 Basename: libykneomgr
-Homepage: http://opensource.yubico.com/libykneomgr/
+Homepage: https://developers.yubico.com/libykneomgr/
 License: LGPL-3+
 Name: YubiKey NEO Manager C Library
 Project: libykneomgr
