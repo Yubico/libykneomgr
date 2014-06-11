@@ -90,6 +90,15 @@ cross-compiled to Windows using MinGW (see windows.mk) using the PCSC
 backend.  It may also be built for Mac OS X (see macosx.mk), also
 using the PCSC backend.
 
+Troubleshooting
+---------------
+
+If you get a generic error from the library (like
+YKNEOMGR_BACKEND_ERROR) or "Backend error" from the command line tool,
+it indicates a problem in the lower-level PCSC backend.  On GNU and
+Mac, check that pcscd is indeed running, and that the command line
+tool "pcsc_scan" finds your smartcard.
+
 Namespaces
 ----------
 
