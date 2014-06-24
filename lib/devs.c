@@ -76,9 +76,9 @@ ykneomgr_done (ykneomgr_dev * dev)
  * @name: input string with device name to connect to.
  *
  * Establish connection to a named PCSC device and verify that it has
- * the YubiKey NEO applet.  The @name string should be a PCSC device
- * name; you can use the command line tool "pcsc_scan" to list
- * connected devices.
+ * the YubiKey OTP applet.  The @name string should be a PCSC device
+ * name; you can use ykneomgr_list_devices() to list connected
+ * devices.
  *
  * Returns: On success, %YKNEOMGR_OK (integer 0) is returned, when no
  *   device could be found %YKNEOMGR_NO_DEVICE is returned, or another
@@ -178,20 +178,25 @@ ykneomgr_list_devices (ykneomgr_dev * dev, char *devicestr, size_t * len)
 }
 
 /**
- * ykneomgr_discover:
+ * ykneomgr_discover_match:
  * @dev: a #ykneomgr_dev device handle.
+ * @match: substring to match card reader for, or %NULL.
  *
- * Discover and establish connection to a YubiKey NEO.  The function
- * will return an error if more than one device is present, or if no
- * device is present.
+ * Discover and establish connection to the first found YubiKey NEO
+ * that has a card reader name matching @match.  A YubiKey NEO is
+ * identified by having the YubiKey OTP applet installed, i.e., a
+ * connect followed by attempting to select the YubiKey OTP applet.
+ * If @match is NULL, then the first YubiKey NEO device detected will
+ * be used.
  *
  * Returns: On success, %YKNEOMGR_OK (integer 0) is returned, when no
- *   device could be found %YKNEOMGR_NO_DEVICE is returned, when too
- *   many devices are present %YKNEOMGR_TOO_MANY_DEVICES is returned,
- *   or another #ykneomgr_rc error code.
+ *   device could be found %YKNEOMGR_NO_DEVICE is returned, or another
+ *   #ykneomgr_rc error code.
+ *
+ * Since: 0.1.4
  */
 ykneomgr_rc
-ykneomgr_discover (ykneomgr_dev * dev)
+ykneomgr_discover_match (ykneomgr_dev * dev, const char *match)
 {
   char *buf;
   size_t j, k, len;
@@ -209,10 +214,17 @@ ykneomgr_discover (ykneomgr_dev * dev)
   if (rc != YKNEOMGR_OK)
     goto done;
 
-  for (j = 0, k = 0; j < len;)
+  for (k = 0, j = 0; j < len; k++, j += strlen (buf + j) + 1)
     {
       if (buf[j] == '\0')
 	break;
+
+      if (match && strstr (buf + j, match) == 0)
+	{
+	  if (debug)
+	    printf ("Skipping reader %zd: %s\n", k, buf + j);
+	  continue;
+	}
 
       if (debug)
 	printf ("Trying reader %zd: %s\n", k, buf + j);
@@ -220,18 +232,33 @@ ykneomgr_discover (ykneomgr_dev * dev)
       rc = ykneomgr_connect (dev, buf + j);
       if (rc == YKNEOMGR_OK)
 	goto done;
-
-      k++;
-      j += strlen (buf + j) + 1;
     }
 
-  if (k == 0)
-    return YKNEOMGR_NO_DEVICE;
+  rc = YKNEOMGR_NO_DEVICE;
 
-done:
+ done:
   free (buf);
 
   return rc;
+}
+
+/**
+ * ykneomgr_discover:
+ * @dev: a #ykneomgr_dev device handle.
+ *
+ * Discover and establish connection to the first found YubiKey NEO.
+ * A YubiKey NEO is identified by having the YubiKey OTP applet
+ * installed, i.e., a connect followed by attempting to select the
+ * YubiKey OTP applet.
+ *
+ * Returns: On success, %YKNEOMGR_OK (integer 0) is returned, when no
+ *   device could be found %YKNEOMGR_NO_DEVICE is returned, otherwise
+ *   another #ykneomgr_rc error code is returned.
+ */
+ykneomgr_rc
+ykneomgr_discover (ykneomgr_dev * dev)
+{
+  return ykneomgr_discover_match (dev, NULL);
 }
 
 /**

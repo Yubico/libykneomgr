@@ -46,3 +46,9 @@ YKNEOMGR_0.1.0
   global:
     ykneomgr_send_apdu;
 } YKNEOMGR_0.0.0;
+
+YKNEOMGR_0.1.4
+{
+  global:
+    ykneomgr_discover_match;
+} YKNEOMGR_0.1.0;

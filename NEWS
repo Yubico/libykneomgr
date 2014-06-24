@@ -2,6 +2,10 @@ libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
 * Version 0.1.4 (unreleased)
 
+** ykneomgr: Added --reader (-r) to specify card reader name to use.
+
+** libykneomgr: Add ykneomgr_discover_match.
+
 * Version 0.1.3 (released 2014-05-01)
 
 ** doc: Improve hyphenization of ykneomgr manpage.

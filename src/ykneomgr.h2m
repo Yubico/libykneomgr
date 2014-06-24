@@ -94,6 +94,25 @@ CAP file sizes it takes around 5 seconds.
 
    ykneomgr \-\-applet\-install path/to/applet.cap
 
+To work with multiple card readers use the \-\-reader or \-r
+parameter, giving it a substring of the card reader name to use.
+Consider a system which has three card readers, one YubiKey NEO in
+CCID mode, one YubiKey NEO in OTP+CCID mode, and one Gemalto GemPC
+Express reader.  Running ykneomgr \-l results in the following output:
+
+   0: Gemalto GemPC Express 00 00
+   1: Yubico Yubikey NEO CCID 01 00
+   2: Yubico Yubikey NEO OTP+CCID 02 00
+
+To use the second NEO, you could use \-r OTP+CCID as follows:
+
+   ykneomgr \-\-reader OTP+CCID \-\-applet\-list
+
+To use the first NEO, you could match on the trailing digits which is
+the device number.  For example:
+
+   ykneomgr \-\-reader 01 \-\-applet\-list
+
 [TROBLESHOOTING]
 
 Debug messages are printed if you pass the \-\-debug parameter, which

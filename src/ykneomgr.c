@@ -46,10 +46,10 @@ doit (struct gengetopt_args_info *args_info, uint8_t mode,
 
   if (!args_info->list_readers_flag)
     {
-      rc = ykneomgr_discover (dev);
+      rc = ykneomgr_discover_match (dev, args_info->reader_arg);
       if (rc != YKNEOMGR_OK)
 	{
-	  printf ("error: ykneomgr_discover (%d): %s\n",
+	  printf ("error: ykneomgr_discover_match (%d): %s\n",
 		  rc, ykneomgr_strerror (rc));
 	  return EXIT_FAILURE;
 	}

@@ -44,6 +44,8 @@ extern "C"
 
   extern ykneomgr_rc ykneomgr_connect (ykneomgr_dev * dev, const char *name);
   extern ykneomgr_rc ykneomgr_discover (ykneomgr_dev * dev);
+  extern ykneomgr_rc ykneomgr_discover_match (ykneomgr_dev * dev,
+					      const char *match);
 
   extern uint8_t ykneomgr_get_version_major (ykneomgr_dev * dev);
   extern uint8_t ykneomgr_get_version_minor (ykneomgr_dev * dev);
