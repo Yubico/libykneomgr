@@ -289,8 +289,7 @@ main (int argc, char *argv[])
       char *endptr;
       long m = strtol (args_info.set_mode_arg, &endptr, 16);
 
-      if (*endptr != '\0'
-	  || !(m == 0x00 || m == 0x01 || m == 0x02 || m == 0x81 || m == 0x82))
+      if (*endptr != '\0')
 	{
 	  fprintf (stderr, "%s: invalid mode: %s\n", argv[0],
 		   args_info.set_mode_arg);
