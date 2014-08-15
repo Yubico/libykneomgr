@@ -68,7 +68,7 @@ doit:
 	$(MAKE) -f windows.mk doit ARCH=32 HOST=i686-w64-mingw32 CHECK=check
 
 64bit:
-	$(MAKE) -f windows.mk doit ARCH=64 HOST=x86_64-w64-mingw32 CHECK=check
+	$(MAKE) -f windows.mk doit ARCH=64 HOST=x86_64-w64-mingw32 CHECK="HELP2MAN=true"
 
 upload:
 	@if test ! -d "$(YUBICO_GITHUB_REPO)"; then \
