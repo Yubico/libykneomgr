@@ -65,7 +65,7 @@ you are doing, you should download the release files instead.
 
 You may check out the sources using Git with the following command:
 
-  git clone git://github.com/Yubico/libykneomgr.git
+  git clone https://github.com/Yubico/libykneomgr.git
 
 This will create a directory 'libykneomgr'.  Enter the directory:
 
