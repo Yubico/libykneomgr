@@ -114,6 +114,11 @@ doit (struct gengetopt_args_info *args_info, uint8_t mode,
 	  j += strlen (str + j) + 1;
 	}
 
+      if (len == 0)
+	{
+	  printf("No readers found.  You may need to run ykpersonalize -m first.\n");
+	}
+
       free (str);
     }
   else if (args_info->set_mode_given)
