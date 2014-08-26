@@ -13,14 +13,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_INIT([libykneomgr], [0.1.5], [yubico-devel@googlegroups.com])
+AC_INIT([libykneomgr], [0.1.6], [yubico-devel@googlegroups.com])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_AUX_DIR([build-aux])
 
 # http://www.gnu.org/s/libtool/manual/html_node/Updating-version-info.html
 AC_SUBST([LT_CURRENT], 1)
-AC_SUBST([LT_REVISION], 5)
+AC_SUBST([LT_REVISION], 6)
 AC_SUBST([LT_AGE], 1)
 
 AM_INIT_AUTOMAKE([-Wall -Werror])
