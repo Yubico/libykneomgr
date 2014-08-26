@@ -1,6 +1,9 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.1.5 (unreleased)
+* Version 0.1.5 (released 2014-08-26)
+
+** libykneomgr: Fix discovery when more than 12 bytes of data returned from
+select.
 
 * Version 0.1.4 (released 2014-08-15)
 
