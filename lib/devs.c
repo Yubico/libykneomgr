@@ -237,7 +237,7 @@ ykneomgr_discover_match (ykneomgr_dev * dev, const char *match)
 
   rc = YKNEOMGR_NO_DEVICE;
 
- done:
+done:
   free (buf);
 
   return rc;
