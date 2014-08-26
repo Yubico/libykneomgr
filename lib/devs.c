@@ -100,7 +100,8 @@ ykneomgr_connect (ykneomgr_dev * dev, const char *name)
   if (rc != YKNEOMGR_OK)
     return rc;
 
-  if (recvAPDULen != 12 || recvAPDU[10] != 0x90 || recvAPDU[11] != 0x00)
+  if (recvAPDULen < 12 || recvAPDU[recvAPDULen - 2] != 0x90
+      || recvAPDU[recvAPDULen - 1] != 0x00)
     {
       if (debug)
 	printf ("YubiKey NEO applet selection failed\n");
