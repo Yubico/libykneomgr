@@ -51,7 +51,7 @@ doit:
 	cp ../$(PACKAGE)-$(VERSION).tar.gz . && \
 	tar xfa $(PACKAGE)-$(VERSION).tar.gz && \
 	cd $(PACKAGE)-$(VERSION)/ && \
-	lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
+	CC="$(HOST)-gcc -static-libgcc" lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
 	make install $(CHECK) && \
 	rm -rf $(PWD)/tmp$(ARCH)/root/lib/pkgconfig/ && \
 	mkdir $(PWD)/tmp$(ARCH)/root/doc && \
