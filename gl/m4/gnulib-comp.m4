@@ -39,56 +39,21 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
   AC_REQUIRE([gl_PROG_AR_RANLIB])
   # Code from module absolute-header:
-  # Code from module alloca-opt:
   # Code from module crypto/des:
-  # Code from module errno:
-  # Code from module extensions:
-  AC_REQUIRE([gl_USE_SYSTEM_EXTENSIONS])
-  # Code from module extern-inline:
-  # Code from module float:
-  # Code from module fpieee:
-  AC_REQUIRE([gl_FP_IEEE])
-  # Code from module fpucw:
-  # Code from module frexp-nolibm:
-  # Code from module frexpl-nolibm:
-  # Code from module fseterr:
   # Code from module gnumakefile:
   # Code from module havelib:
   # Code from module include_next:
-  # Code from module isnand-nolibm:
-  # Code from module isnanf-nolibm:
-  # Code from module isnanl-nolibm:
   # Code from module lib-symbol-versions:
   # Code from module maintainer-makefile:
   # Code from module manywarnings:
-  # Code from module math:
-  # Code from module memchr:
   # Code from module multiarch:
-  # Code from module nocrash:
-  # Code from module printf-frexp:
-  # Code from module printf-frexpl:
-  # Code from module printf-posix:
-  # Code from module printf-safe:
-  # Code from module signbit:
-  # Code from module size_max:
-  # Code from module snippet/arg-nonnull:
-  # Code from module snippet/c++defs:
-  # Code from module snippet/warn-on-use:
   # Code from module ssize_t:
   # Code from module stdbool:
-  # Code from module stddef:
   # Code from module stdint:
-  # Code from module stdio:
-  # Code from module string:
   # Code from module sys_types:
   # Code from module useless-if-before-free:
-  # Code from module vasnprintf:
   # Code from module vc-list-files:
-  # Code from module verify:
-  # Code from module vfprintf-posix:
   # Code from module warnings:
-  # Code from module wchar:
-  # Code from module xsize:
 ])
 
 # This macro should be invoked from ./configure.ac, in the section
@@ -105,30 +70,6 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gl'
-  gl_FUNC_ALLOCA
-  gl_HEADER_ERRNO_H
-  AC_REQUIRE([gl_EXTERN_INLINE])
-  gl_FLOAT_H
-  if test $REPLACE_FLOAT_LDBL = 1; then
-    AC_LIBOBJ([float])
-  fi
-  if test $REPLACE_ITOLD = 1; then
-    AC_LIBOBJ([itold])
-  fi
-  gl_FUNC_FREXP_NO_LIBM
-  if test $gl_func_frexp_no_libm != yes; then
-    AC_LIBOBJ([frexp])
-  fi
-  gl_MATH_MODULE_INDICATOR([frexp])
-  gl_FUNC_FREXPL_NO_LIBM
-  if test $HAVE_DECL_FREXPL = 0 || test $gl_func_frexpl_no_libm = no; then
-    AC_LIBOBJ([frexpl])
-  fi
-  gl_MATH_MODULE_INDICATOR([frexpl])
-  gl_FUNC_FSETERR
-  if test $ac_cv_func___fseterr = no; then
-    AC_LIBOBJ([fseterr])
-  fi
   # Autoconf 2.61a.99 and earlier don't support linking a file only
   # in VPATH builds.  But since GNUmakefile is for maintainer use
   # only, it does not matter if we skip the link with older autoconf.
@@ -139,59 +80,16 @@ AC_DEFUN([gl_INIT],
           m4_defn([m4_PACKAGE_VERSION])), [1], [],
         [AC_CONFIG_LINKS([$GNUmakefile:$GNUmakefile], [],
           [GNUmakefile=$GNUmakefile])])
-  gl_FUNC_ISNAND_NO_LIBM
-  if test $gl_func_isnand_no_libm != yes; then
-    AC_LIBOBJ([isnand])
-    gl_PREREQ_ISNAND
-  fi
-  gl_FUNC_ISNANF_NO_LIBM
-  if test $gl_func_isnanf_no_libm != yes; then
-    AC_LIBOBJ([isnanf])
-    gl_PREREQ_ISNANF
-  fi
-  gl_FUNC_ISNANL_NO_LIBM
-  if test $gl_func_isnanl_no_libm != yes; then
-    AC_LIBOBJ([isnanl])
-    gl_PREREQ_ISNANL
-  fi
   gl_LD_VERSION_SCRIPT
   AC_CONFIG_COMMANDS_PRE([m4_ifdef([AH_HEADER],
     [AC_SUBST([CONFIG_INCLUDE], m4_defn([AH_HEADER]))])])
   AC_REQUIRE([AC_PROG_SED])
-  gl_MATH_H
-  gl_FUNC_MEMCHR
-  if test $HAVE_MEMCHR = 0 || test $REPLACE_MEMCHR = 1; then
-    AC_LIBOBJ([memchr])
-    gl_PREREQ_MEMCHR
-  fi
-  gl_STRING_MODULE_INDICATOR([memchr])
   gl_MULTIARCH
-  gl_FUNC_PRINTF_FREXP
-  gl_FUNC_PRINTF_FREXPL
-  gl_FUNC_PRINTF_POSIX
-  gl_STDIO_MODULE_INDICATOR([printf-posix])
-  m4_divert_text([INIT_PREPARE], [gl_printf_safe=yes])
-  gl_SIGNBIT
-  if test $REPLACE_SIGNBIT = 1; then
-    AC_LIBOBJ([signbitf])
-    AC_LIBOBJ([signbitd])
-    AC_LIBOBJ([signbitl])
-  fi
-  gl_MATH_MODULE_INDICATOR([signbit])
-  gl_SIZE_MAX
   gt_TYPE_SSIZE_T
   AM_STDBOOL_H
-  gl_STDDEF_H
   gl_STDINT_H
-  gl_STDIO_H
-  gl_HEADER_STRING_H
   gl_SYS_TYPES_H
   AC_PROG_MKDIR_P
-  gl_FUNC_VASNPRINTF
-  gl_FUNC_VFPRINTF_POSIX
-  gl_STDIO_MODULE_INDICATOR([vfprintf-posix])
-  gl_WCHAR_H
-  gl_XSIZE
   # End of code from modules
   m4_ifval(gl_LIBSOURCES_LIST, [
     m4_syscmd([test ! -d ]m4_defn([gl_LIBSOURCES_DIR])[ ||
@@ -329,121 +227,31 @@ AC_DEFUN([gltests_LIBSOURCES], [
 # gnulib-tool and may be removed by future gnulib-tool invocations.
 AC_DEFUN([gl_FILE_LIST], [
   build-aux/config.rpath
-  build-aux/snippet/arg-nonnull.h
-  build-aux/snippet/c++defs.h
-  build-aux/snippet/warn-on-use.h
   build-aux/useless-if-before-free
   build-aux/vc-list-files
-  lib/alloca.in.h
-  lib/asnprintf.c
   lib/des.c
   lib/des.h
-  lib/errno.in.h
-  lib/float+.h
-  lib/float.c
-  lib/float.in.h
-  lib/fpucw.h
-  lib/frexp.c
-  lib/frexpl.c
-  lib/fseterr.c
-  lib/fseterr.h
-  lib/isnan.c
-  lib/isnand-nolibm.h
-  lib/isnand.c
-  lib/isnanf-nolibm.h
-  lib/isnanf.c
-  lib/isnanl-nolibm.h
-  lib/isnanl.c
-  lib/itold.c
-  lib/math.c
-  lib/math.in.h
-  lib/memchr.c
-  lib/memchr.valgrind
-  lib/printf-args.c
-  lib/printf-args.h
-  lib/printf-frexp.c
-  lib/printf-frexp.h
-  lib/printf-frexpl.c
-  lib/printf-frexpl.h
-  lib/printf-parse.c
-  lib/printf-parse.h
-  lib/printf.c
-  lib/signbitd.c
-  lib/signbitf.c
-  lib/signbitl.c
-  lib/size_max.h
   lib/stdbool.in.h
-  lib/stddef.in.h
   lib/stdint.in.h
-  lib/stdio-impl.h
-  lib/stdio.in.h
-  lib/string.in.h
   lib/sys_types.in.h
-  lib/vasnprintf.c
-  lib/vasnprintf.h
-  lib/verify.h
-  lib/vfprintf.c
-  lib/wchar.in.h
-  lib/xsize.c
-  lib/xsize.h
   m4/00gnulib.m4
   m4/absolute-header.m4
-  m4/alloca.m4
-  m4/asm-underscore.m4
-  m4/errno_h.m4
-  m4/exponentd.m4
-  m4/exponentf.m4
-  m4/exponentl.m4
-  m4/extensions.m4
-  m4/extern-inline.m4
-  m4/float_h.m4
-  m4/fpieee.m4
-  m4/frexp.m4
-  m4/frexpl.m4
-  m4/fseterr.m4
   m4/gnulib-common.m4
   m4/include_next.m4
-  m4/intmax_t.m4
-  m4/inttypes_h.m4
-  m4/isnand.m4
-  m4/isnanf.m4
-  m4/isnanl.m4
   m4/ld-version-script.m4
-  m4/ldexpl.m4
   m4/lib-ld.m4
   m4/lib-link.m4
   m4/lib-prefix.m4
   m4/longlong.m4
   m4/manywarnings.m4
-  m4/math_h.m4
-  m4/memchr.m4
-  m4/mmap-anon.m4
   m4/multiarch.m4
-  m4/nocrash.m4
   m4/off_t.m4
   m4/onceonly.m4
-  m4/printf-frexp.m4
-  m4/printf-frexpl.m4
-  m4/printf-posix-rpl.m4
-  m4/printf.m4
-  m4/signbit.m4
-  m4/size_max.m4
   m4/ssize_t.m4
   m4/stdbool.m4
-  m4/stddef_h.m4
   m4/stdint.m4
-  m4/stdint_h.m4
-  m4/stdio_h.m4
-  m4/string_h.m4
   m4/sys_types_h.m4
-  m4/vasnprintf.m4
-  m4/vfprintf-posix.m4
-  m4/warn-on-use.m4
   m4/warnings.m4
-  m4/wchar_h.m4
-  m4/wchar_t.m4
-  m4/wint_t.m4
-  m4/xsize.m4
   top/GNUmakefile
   top/maint.mk
 ])
