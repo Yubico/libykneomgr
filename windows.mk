@@ -31,6 +31,8 @@ usage:
 
 doit:
 	rm -rf tmp$(ARCH) && mkdir tmp$(ARCH) && cd tmp$(ARCH) && \
+	export WINEARCH=win$(ARCH) WINEPREFIX=$$PWD/win$(ARCH) && \
+	DISPLAY= wine hostname && \
 	mkdir -p root/licenses && \
 	cp ../zlib-$(ZLIB_VERSION).tar.gz . || \
 	wget "http://zlib.net/zlib-$(ZLIB_VERSION).tar.gz" && \
