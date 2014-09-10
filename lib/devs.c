@@ -382,7 +382,7 @@ ykneomgr_get_mode (ykneomgr_dev * dev)
  *
  * Get serial number of a YubiKey NEO, if visible.
  *
- * Returns: the YubiKey NEO device mode, or 0 if not visible.
+ * Returns: the YubiKey NEO serial number, or 0 if not visible.
  */
 uint32_t
 ykneomgr_get_serialno (ykneomgr_dev * dev)
