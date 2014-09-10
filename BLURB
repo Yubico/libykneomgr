@@ -5,3 +5,4 @@ License: LGPL-3+
 Name: YubiKey NEO Manager C Library
 Project: libykneomgr
 Summary: Library and command line tool to manage YubiKey NEO
+Travis: https://travis-ci.org/Yubico/libykneomgr
