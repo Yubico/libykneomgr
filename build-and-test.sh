@@ -3,6 +3,7 @@
 set -e
 set -x
 
+touch ChangeLog
 autoreconf -i
 
 if [ "x$ARCH" != "x" ]; then
