@@ -71,6 +71,6 @@ my-release:
 	cd $(srcdir) && git tag -u $(KEYID) -m $(VERSION) $(PACKAGE)-$(VERSION)
 	cd $(srcdir) && git push --tags
 	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION).tar.gz*
-	rsync -a $(srcdir)/gtk-doc/html $(YUBICO_GITHUB_REPO)/libykneomgr/gtk-doc/
+	rsync -a $(srcdir)/gtk-doc/html/ $(YUBICO_GITHUB_REPO)/libykneomgr/gtk-doc/
 
 release: my-release
