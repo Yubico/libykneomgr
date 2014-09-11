@@ -62,6 +62,7 @@ doit:
 	cp COPYING $(PWD)/tmp$(ARCH)/root/licenses/$(PACKAGE).txt && \
 	cd .. && \
 	cd root && \
+	! test -d share/gtk-doc/html/$(PACKAGE) || \
 	mv share/gtk-doc/html/$(PACKAGE)/* $(PWD)/tmp$(ARCH)/root/doc/ && \
 	rm -rf share/gtk-doc && \
 	rm -f ../../$(PACKAGE)-$(VERSION)-win$(ARCH).zip && \

@@ -8,6 +8,7 @@ autoreconf -i
 
 if [ "x$ARCH" != "x" ]; then
     version=`cat NEWS  | grep unreleased | cut -d' ' -f3`
+    touch gtk-doc/libykneomgr.pdf
     set +e
     tar --exclude .git --transform="s/^\./libykneomgr-${version}/" -czf libykneomgr-${version}.tar.gz .
     set -e
