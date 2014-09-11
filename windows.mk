@@ -16,6 +16,7 @@
 PACKAGE=libykneomgr
 ZLIB_VERSION=1.2.8
 LIBZIP_VERSION=0.11.2
+EXTRA ?= --enable-gtk-doc --enable-gtk-doc-pdf
 
 all: usage 32bit 64bit
 
@@ -53,7 +54,7 @@ doit:
 	cp ../$(PACKAGE)-$(VERSION).tar.gz . && \
 	tar xfa $(PACKAGE)-$(VERSION).tar.gz && \
 	cd $(PACKAGE)-$(VERSION)/ && \
-	CC="$(HOST)-gcc -static-libgcc" lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --enable-gtk-doc --enable-gtk-doc-pdf && \
+	CC="$(HOST)-gcc -static-libgcc" lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root $(EXTRA) && \
 	make install $(CHECK) && \
 	rm -rf $(PWD)/tmp$(ARCH)/root/lib/pkgconfig/ && \
 	mkdir $(PWD)/tmp$(ARCH)/root/doc && \
@@ -67,10 +68,10 @@ doit:
 	zip -r ../../$(PACKAGE)-$(VERSION)-win$(ARCH).zip *
 
 32bit:
-	$(MAKE) -f windows.mk doit ARCH=32 HOST=i686-w64-mingw32 CHECK=check
+	$(MAKE) -f windows.mk doit ARCH=32 HOST=i686-w64-mingw32 CHECK=check EXTRA="$(EXTRA)"
 
 64bit:
-	$(MAKE) -f windows.mk doit ARCH=64 HOST=x86_64-w64-mingw32 CHECK=check
+	$(MAKE) -f windows.mk doit ARCH=64 HOST=x86_64-w64-mingw32 CHECK=check EXTRA="$(EXTRA)"
 
 upload:
 	@if test ! -d "$(YUBICO_GITHUB_REPO)"; then \

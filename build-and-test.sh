@@ -12,7 +12,7 @@ if [ "x$ARCH" != "x" ]; then
     tar --exclude .git --transform="s/^\./libykneomgr-${version}/" -czf libykneomgr-${version}.tar.gz .
     set -e
 
-    make -f windows.mk ${ARCH}bit VERSION=$version
+    make -f windows.mk ${ARCH}bit VERSION=$version EXTRA=""
 else
     ./configure
     make check
