@@ -1,6 +1,6 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.1.6 (unreleased)
+* Version 0.1.6 (released 2014-09-15)
 
 ** Rename project from 'YubiKey NEO Manager' to 'YubiKey NEO CCID Manager'
 ** to clarify that this project is only about managing the CCID-aspect
