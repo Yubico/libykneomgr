@@ -8,9 +8,10 @@
   <bookinfo>
     <title>Yubico YubiKey NEO CCID Manager C Library</title>
     <releaseinfo>
-      The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="https://github.com/Yubico/libykneomgr">
-	https://github.com/Yubico/libykneomgr</ulink>.
+      The latest version of the project can be found on-line at
+      <ulink role="online-location"
+	     url="https://developers.yubico.com/libykneomgr/">
+	https://developers.yubico.com/libykneomgr/</ulink>.
     </releaseinfo>
   </bookinfo>
 

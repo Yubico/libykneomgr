@@ -75,15 +75,15 @@ doit:
 	$(MAKE) -f windows.mk doit ARCH=64 HOST=x86_64-w64-mingw32 CHECK=check EXTRA="$(EXTRA)"
 
 upload:
-	@if test ! -d "$(YUBICO_GITHUB_REPO)"; then \
-		echo "yubico.github.com repo not found!"; \
-		echo "Make sure that YUBICO_GITHUB_REPO is set"; \
+	@if test ! -d "$(YUBICO_WWW_REPO)"; then \
+		echo "www repo not found!"; \
+		echo "Make sure that YUBICO_WWW_REPO is set"; \
 		exit 1; \
 	fi
 	gpg --detach-sign --default-key $(PGPKEYID) \
 		$(PACKAGE)-$(VERSION)-win$(BITS).zip
 	gpg --verify $(PACKAGE)-$(VERSION)-win$(BITS).zip.sig
-	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION)-win${BITS}.zip*
+	$(YUBICO_WWW_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION)-win${BITS}.zip*
 
 upload-32bit:
 	$(MAKE) -f windows.mk upload BITS=32

@@ -56,9 +56,9 @@ my-release:
 		echo "  make release KEYID=2117364A"; \
 		exit 1; \
 	fi
-	@if test ! -d "$(YUBICO_GITHUB_REPO)"; then \
-		echo "yubico.github.com repo not found!"; \
-		echo "Make sure that YUBICO_GITHUB_REPO is set"; \
+	@if test ! -d "$(YUBICO_WWW_REPO)"; then \
+		echo "www repo not found!"; \
+		echo "Make sure that YUBICO_WWW_REPO is set"; \
 		exit 1; \
 	fi
 	@head -3 $(srcdir)/NEWS | grep -q "Version $(VERSION) .released `date -I`" || \
@@ -70,7 +70,7 @@ my-release:
 	cd $(srcdir) && git push
 	cd $(srcdir) && git tag -u $(KEYID) -m $(VERSION) $(PACKAGE)-$(VERSION)
 	cd $(srcdir) && git push --tags
-	$(YUBICO_GITHUB_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION).tar.gz*
-	rsync -a $(srcdir)/gtk-doc/html/ $(YUBICO_GITHUB_REPO)/libykneomgr/gtk-doc/
+	$(YUBICO_WWW_REPO)/publish $(PACKAGE) $(VERSION) $(PACKAGE)-$(VERSION).tar.gz*
+	rsync -a $(srcdir)/gtk-doc/html/ $(YUBICO_WWW_REPO)/libykneomgr/gtk-doc/
 
 release: my-release
