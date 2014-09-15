@@ -6,7 +6,7 @@
 ]>
 <book id="index">
   <bookinfo>
-    <title>Yubico YubiKey NEO Manager C Library</title>
+    <title>Yubico YubiKey NEO CCID Manager C Library</title>
     <releaseinfo>
       The latest version of this documentation can be found on-line at
       <ulink role="online-location" url="https://github.com/Yubico/libykneomgr">
@@ -15,14 +15,15 @@
   </bookinfo>
 
   <chapter id="intro">
-    <title>Yubico YubiKey NEO Manager C Library</title>
+    <title>Yubico YubiKey NEO CCID Manager C Library</title>
 
     <para>
-      This is a C library to interact with the YubiKey NEO.  There is
-      a command line tool "ykneomgr" for interactive use.  It supports
-      querying the YubiKey NEO for firmware version, operation mode
-      (OTP/CCID) and serial number.  You may also mode switch the
-      device and manage applets (list, delete and install).
+      This is a C library to interact with the CCID-part of the
+      YubiKey NEO.  There is a command line tool "ykneomgr" for
+      interactive use.  It supports querying the YubiKey NEO for
+      firmware version, operation mode (OTP/CCID) and serial number.
+      You may also mode switch the device and manage applets (list,
+      delete and install).
     </para>
 
     <para>

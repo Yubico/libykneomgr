@@ -19,7 +19,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: @PACKAGE@
-Description: Yubico YubiKey NEO Manager C Library
+Description: Yubico YubiKey NEO CCID Manager C Library
 URL: https://www.yubico.com/
 Version: @VERSION@
 Libs: -L${libdir} -lykneomgr

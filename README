@@ -1,12 +1,12 @@
-Yubico YubiKey NEO Manager C Library
-====================================
+Yubico YubiKey NEO CCID Manager C Library
+=========================================
 
 Introduction
 ------------
 
-This is a C library to interact with the YubiKey NEO.  There is a
-command line tool "ykneomgr" for interactive use.  It supports
-querying the YubiKey NEO for firmware version, operation mode
+This is a C library to interact with the CCID-part of the YubiKey NEO.
+There is a command line tool "ykneomgr" for interactive use.  It
+supports querying the YubiKey NEO for firmware version, operation mode
 (OTP/CCID) and serial number.  You may also mode switch the device and
 manage applets (list, delete and install).
 
@@ -102,7 +102,6 @@ tool "pcsc_scan" finds your smartcard.
 Namespaces
 ----------
 
-Project full name: Yubico YubiKey NEO Manager C Library
 Project short name: libykneomgr
 Header files: $prefix/include/ykneomgr/*
 Library files: $prefix/lib/libykneomgr*

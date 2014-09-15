@@ -2,7 +2,7 @@ Author: Yubico
 Basename: libykneomgr
 Homepage: https://developers.yubico.com/libykneomgr/
 License: LGPL-3+
-Name: YubiKey NEO Manager C Library
+Name: YubiKey NEO CCID Manager C Library
 Project: libykneomgr
-Summary: Library and command line tool to manage YubiKey NEO
+Summary: C Library and tool to manage CCID-aspects of YubiKey NEO
 Travis: https://travis-ci.org/Yubico/libykneomgr
