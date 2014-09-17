@@ -102,9 +102,11 @@ tool "pcsc_scan" finds your smartcard.
 Namespaces
 ----------
 
+...
 Project short name: libykneomgr
 Header files: $prefix/include/ykneomgr/*
 Library files: $prefix/lib/libykneomgr*
 Library symbol prefix: ykneomgr_
 Command line tool: ykneomgr
 Pkg-config: ykneomgr
+...
