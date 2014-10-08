@@ -34,19 +34,22 @@ follows.
 The backend to use is decided at compile time, see the summary at the
 end of the ./configure output.  Use --with-backend=foo to chose
 backend, replacing foo with the backend you want to use.  The default
-and recommended backend is "pcsc" which will be selected if
-present.  The backends "pcsc", "macscard", and "winscard" uses
-the PCSC interface, with slightly different shared library linkage and
-header file names: "pcsc" is used under GNU-like systems, "macscard"
-under Mac OS X, and "winscard" is used under Windows.  In most
-situations, running ./configure should automatically find the proper
-backend to use.
-There is also a backend "globalplatform" available that will use
-libglobalplatform to perform operations.
-
-To force building using the globalplatform interface, you would use:
+and recommended backend is "pcsc" which will be selected if present.
+The backends "pcsc", "macscard", and "winscard" uses the PCSC
+interface, with slightly different shared library linkage and header
+file names: "pcsc" is used under GNU-like systems, "macscard" under
+Mac OS X, and "winscard" is used under Windows.  In most situations,
+running ./configure should automatically find the proper backend to
+use.  There is also a backend "globalplatform" available that will use
+libglobalplatform to perform operations.  To force building using the
+globalplatform interface, you would use:
 
   ./configure --with-backend=globalplatform
+
+LibZIP is a required dependency.  On GNU/Linux systems LibZIP and the
+PCSC dependency may be installed as follows.
+
+  Debian/Ubuntu:   apt-get install libpcsclite-dev libzip-dev
 
 Usage
 -----
@@ -75,6 +78,10 @@ Recent versions of autoconf, automake and libtool must be installed.
 Libzip is required by the library.  Help2man is used to generate the
 manpages.  GTK-DOC is used to generated API documentation.  Gengetopt
 is needed for command line parameter handling.
+
+  Debian/Ubuntu:   apt-get install build-essential autoconf automake libtool
+  Debian/Ubuntu:   apt-get install gtk-doc-tools gengetopt help2man
+  Debian/Ubuntu:   apt-get install libpcsclite-dev libzip-dev
 
 Build the project using:
 
