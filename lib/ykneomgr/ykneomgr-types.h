@@ -25,6 +25,7 @@
  * @YKNEOMGR_NO_DEVICE: No device found.
  * @YKNEOMGR_TOO_MANY_DEVICES: Too many devices found.
  * @YKNEOMGR_BACKEND_ERROR: Input/Output error.
+ * @YKNEOMGR_INCORRECT_KEY: Key error.
  *
  * Error codes.
  */
@@ -35,6 +36,7 @@ typedef enum
   YKNEOMGR_NO_DEVICE = -2,
   YKNEOMGR_TOO_MANY_DEVICES = -3,
   YKNEOMGR_BACKEND_ERROR = -4,
+  YKNEOMGR_INCORRECT_KEY = -5,
 } ykneomgr_rc;
 
 /**

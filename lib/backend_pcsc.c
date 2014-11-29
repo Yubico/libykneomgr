@@ -264,7 +264,7 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
 
   if (memcmp (tmp, recv + 20, DES_BLOCK_SIZE) != 0)
     {
-      return YKNEOMGR_BACKEND_ERROR;
+      return YKNEOMGR_INCORRECT_KEY;
     }
 
   buf[0] = recv[12];
