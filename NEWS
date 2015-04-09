@@ -1,5 +1,7 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
+* Version 0.1.8 (unreleased)
+
 * Version 0.1.7 (released 2015-04-09)
 
 ** Check programming sequence when changing mode.
