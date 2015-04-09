@@ -25,6 +25,23 @@
 #define GETU16(pt) (((uint32_t)((pt)[0] & 0xFF) <<  8) ^ \
 		    ((uint32_t)((pt)[1] & 0xFF)))
 
+static ykneomgr_rc
+_update_status (ykneomgr_dev * dev, const uint8_t * buf, size_t len)
+{
+  if (len < 5)
+    {
+      if (debug)
+	printf ("Failed status parsing.\n");
+      return YKNEOMGR_BACKEND_ERROR;
+    }
+  dev->versionMajor = buf[0];
+  dev->versionMinor = buf[1];
+  dev->versionBuild = buf[2];
+  dev->pgmSeq = buf[3];
+  dev->touchLevel = GETU16 (&buf[4]);
+  return YKNEOMGR_OK;
+}
+
 /**
  * ykneomgr_init:
  * @dev: pointer to newly allocated device handle.
@@ -108,11 +125,7 @@ ykneomgr_connect (ykneomgr_dev * dev, const char *name)
       return YKNEOMGR_NO_DEVICE;
     }
 
-  dev->versionMajor = recvAPDU[0];
-  dev->versionMinor = recvAPDU[1];
-  dev->versionBuild = recvAPDU[2];
-  dev->pgmSeq = recvAPDU[3];
-  dev->touchLevel = GETU16 (&recvAPDU[4]);
+  _update_status (dev, recvAPDU, recvAPDULen);
   dev->mode = recvAPDU[6];
   dev->crTimeout = recvAPDU[7];
   dev->autoEjectTime = GETU16 (&recvAPDU[8]);
@@ -298,6 +311,7 @@ ykneomgr_modeswitch (ykneomgr_dev * dev, uint8_t mode)
     "\x00\xA4\x04\x00\x08\xA0\x00\x00\x05\x27\x20\x01\x01";
   uint8_t mode_apdu[] = "\x00\x01\x11\x00\x01\xFF";
   int rc;
+  uint8_t pgmSeq;
 
   mode_apdu[5] = mode;
 
@@ -305,13 +319,28 @@ ykneomgr_modeswitch (ykneomgr_dev * dev, uint8_t mode)
   if (rc != YKNEOMGR_OK)
     return rc;
 
+  rc = _update_status (dev, buf, buflen);
+  if (rc != YKNEOMGR_OK)
+    return rc;
+  pgmSeq = dev->pgmSeq;
+
   buflen = 258;
 
   rc = backend_apdu (dev, mode_apdu, sizeof mode_apdu - 1, buf, &buflen);
   if (rc != YKNEOMGR_OK)
     return rc;
 
-  return YKNEOMGR_OK;
+  rc = _update_status (dev, buf, buflen);
+  if (rc != YKNEOMGR_OK)
+    return rc;
+
+  /* for sequence 0 we assume success */
+  if (pgmSeq == 0 || dev->pgmSeq > pgmSeq)
+    return YKNEOMGR_OK;
+
+  if (debug)
+    printf ("Failed to update mode.\n");
+  return YKNEOMGR_BACKEND_ERROR;
 }
 
 /**
