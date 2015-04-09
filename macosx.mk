@@ -32,7 +32,7 @@ doit:
 	rm -rf tmp && mkdir tmp && cd tmp && \
 	mkdir -p root/licenses && \
 	cp ../libzip-$(LIBZIP_VERSION).tar.gz . || \
-	wget "http://www.nih.at/libzip/libzip-$(LIBZIP_VERSION).tar.gz" && \
+	curl -L -O "http://www.nih.at/libzip/libzip-$(LIBZIP_VERSION).tar.gz" && \
 	tar xfz libzip-$(LIBZIP_VERSION).tar.gz && \
 	cd libzip-$(LIBZIP_VERSION) && \
 	./configure --prefix=$(PWD)/tmp$(ARCH)/root CFLAGS=-mmacosx-version-min=10.6 && \
