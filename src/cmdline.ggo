@@ -24,7 +24,7 @@ option "list-readers" l "List all connected PCSC devices" flag off
 option "applet-list" a "List applets on device" flag off
 option "applet-delete" D "Delete given applet AID from device" string optional
 option "applet-install" i "Install applets on device from CAP file" string typestr="FILE" optional
-option "set-mode" M "Set the USB operation mode of the YubiKey NEO.\nThe possible MODE arguments are:\n0 for HID device only,\n1 for CCID device only,\n2 for HID/CCID composite device.\n81 for CCID-only with touch eject.\n82 for HID/CCID with touch eject." string optional
+option "set-mode" M "Set the USB operation mode of the YubiKey NEO.\nThe possible MODE arguments are:\n0 for HID device only,\n1 for CCID device only,\n81 for CCID device with touch eject,\n2 for HID/CCID composite device,\n3 for U2F device only,\n4 for OTP/U2F composite device,\n5 for U2F/CCID composite device,\n6 for OTP/U2F/CCID composite device." string optional
 option "send-apdu" S "Send an arbitrary APDU to the device" string optional multiple
 option "reader" r "Use only a matching card reader" string optional
 option "debug" d "Print debug information to standard error" flag off
