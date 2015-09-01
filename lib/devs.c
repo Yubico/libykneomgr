@@ -122,53 +122,55 @@ ykneomgr_connect (ykneomgr_dev * dev, const char *name)
     {
       if (debug)
 	printf ("YubiKey NEO applet selection failed\n");
-      return YKNEOMGR_NO_DEVICE;
     }
-
-  _update_status (dev, recvAPDU, recvAPDULen);
-  dev->mode = recvAPDU[6];
-  dev->crTimeout = recvAPDU[7];
-  dev->autoEjectTime = GETU16 (&recvAPDU[8]);
-
-  if (debug)
+  else
     {
-      printf ("versionMajor %d\n", dev->versionMajor);
-      printf ("versionMinor %d\n", dev->versionMinor);
-      printf ("versionBuild %d\n", dev->versionBuild);
-      printf ("pgmSeq %d\n", dev->pgmSeq);
-      printf ("touchLevel %d\n", dev->touchLevel);
-      printf ("mode %02x\n", dev->mode);
-      printf ("crTimeout %d\n", dev->crTimeout);
-      printf ("autoEjectTime %d\n", dev->autoEjectTime);
-    }
+      _update_status (dev, recvAPDU, recvAPDULen);
+      dev->mode = recvAPDU[6];
+      dev->crTimeout = recvAPDU[7];
+      dev->autoEjectTime = GETU16 (&recvAPDU[8]);
 
-  memcpy (buf, "\x00\x01\x10\x00", 4);
-
-  rc = backend_apdu (dev, buf, 4, recvAPDU, &recvAPDULen);
-  if (rc != YKNEOMGR_OK)
-    return rc;
-
-  if (!((recvAPDULen == 2 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)
-	|| (recvAPDULen == 6 && recvAPDU[4] == 0x90 && recvAPDU[5] == 0x00)))
-    {
       if (debug)
 	{
-	  size_t i;
-	  printf ("apdu %zd: ", recvAPDULen);
-	  for (i = 0; i < recvAPDULen; i++)
-	    printf ("%02x ", recvAPDU[i]);
-	  printf ("\n");
+	  printf ("versionMajor %d\n", dev->versionMajor);
+	  printf ("versionMinor %d\n", dev->versionMinor);
+	  printf ("versionBuild %d\n", dev->versionBuild);
+	  printf ("pgmSeq %d\n", dev->pgmSeq);
+	  printf ("touchLevel %d\n", dev->touchLevel);
+	  printf ("mode %02x\n", dev->mode);
+	  printf ("crTimeout %d\n", dev->crTimeout);
+	  printf ("autoEjectTime %d\n", dev->autoEjectTime);
 	}
 
-      return YKNEOMGR_BACKEND_ERROR;
-    }
+      memcpy (buf, "\x00\x01\x10\x00", 4);
 
-  if (recvAPDULen == 6)
-    dev->serialno = GETU32 (recvAPDU);
+      rc = backend_apdu (dev, buf, 4, recvAPDU, &recvAPDULen);
+      if (rc != YKNEOMGR_OK)
+	return rc;
 
-  if (debug)
-    {
-      printf ("serialno %d\n", dev->serialno);
+      if (!((recvAPDULen == 2 && recvAPDU[0] == 0x90 && recvAPDU[1] == 0x00)
+	    || (recvAPDULen == 6 && recvAPDU[4] == 0x90
+		&& recvAPDU[5] == 0x00)))
+	{
+	  if (debug)
+	    {
+	      size_t i;
+	      printf ("apdu %zd: ", recvAPDULen);
+	      for (i = 0; i < recvAPDULen; i++)
+		printf ("%02x ", recvAPDU[i]);
+	      printf ("\n");
+	    }
+
+	  return YKNEOMGR_BACKEND_ERROR;
+	}
+
+      if (recvAPDULen == 6)
+	dev->serialno = GETU32 (recvAPDU);
+
+      if (debug)
+	{
+	  printf ("serialno %d\n", dev->serialno);
+	}
     }
 
   return YKNEOMGR_OK;
