@@ -1,6 +1,10 @@
 libykneomgr NEWS -- History of user-visible changes.             -*- outline -*-
 
-* Version 0.1.8 (unreleased)
+* Version 0.1.8 (released 2015-10-01)
+
+** Add documentation for mode arguments.
+
+** Don't treat applet selection error as a critical error.
 
 * Version 0.1.7 (released 2015-04-09)
 
