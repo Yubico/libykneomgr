@@ -196,7 +196,7 @@ doit (struct gengetopt_args_info *args_info, uint8_t mode,
 	  size_t k;
 	  uint8_t send[0xff];
 	  uint8_t *sendptr = send;
-	  uint8_t recv[0xff];
+	  uint8_t recv[0x101];
 	  size_t recvlen = sizeof (recv);
 
 	  while (*arg != '\0')
