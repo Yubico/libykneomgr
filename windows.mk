@@ -15,7 +15,7 @@
 
 PACKAGE=libykneomgr
 ZLIB_VERSION=1.2.8
-LIBZIP_VERSION=0.11.2
+LIBZIP_VERSION=1.0.1
 EXTRA ?= --enable-gtk-doc --enable-gtk-doc-pdf
 
 all: usage 32bit 64bit
