@@ -1,5 +1,5 @@
 # DO NOT EDIT! GENERATED AUTOMATICALLY!
-# Copyright (C) 2002-2014 Free Software Foundation, Inc.
+# Copyright (C) 2002-2015 Free Software Foundation, Inc.
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -37,9 +37,14 @@ AC_DEFUN([gl_EARLY],
   m4_pattern_allow([^gl_ES$])dnl a valid locale name
   m4_pattern_allow([^gl_LIBOBJS$])dnl a variable
   m4_pattern_allow([^gl_LTLIBOBJS$])dnl a variable
+
+  # Pre-early section.
   AC_REQUIRE([gl_PROG_AR_RANLIB])
+
   # Code from module absolute-header:
   # Code from module crypto/des:
+  # Code from module crypto/gc:
+  # Code from module crypto/gc-random:
   # Code from module gnumakefile:
   # Code from module havelib:
   # Code from module include_next:
@@ -70,6 +75,18 @@ AC_DEFUN([gl_INIT],
   m4_pushdef([gl_LIBSOURCES_DIR], [])
   gl_COMMON
   gl_source_base='gl'
+  gl_GC
+  if test "$ac_cv_libgcrypt" = yes; then
+    AC_LIBOBJ([gc-libgcrypt])
+  else
+    AC_LIBOBJ([gc-gnulib])
+  fi
+  if test $gl_cond_libtool = false; then
+    gl_ltlibdeps="$gl_ltlibdeps $LTLIBGCRYPT"
+    gl_libdeps="$gl_libdeps $LIBGCRYPT"
+  fi
+  gl_GC_RANDOM
+  gl_MODULE_INDICATOR([gc-random])
   # Autoconf 2.61a.99 and earlier don't support linking a file only
   # in VPATH builds.  But since GNUmakefile is for maintainer use
   # only, it does not matter if we skip the link with older autoconf.
@@ -231,11 +248,16 @@ AC_DEFUN([gl_FILE_LIST], [
   build-aux/vc-list-files
   lib/des.c
   lib/des.h
+  lib/gc-gnulib.c
+  lib/gc-libgcrypt.c
+  lib/gc.h
   lib/stdbool.in.h
   lib/stdint.in.h
   lib/sys_types.in.h
   m4/00gnulib.m4
   m4/absolute-header.m4
+  m4/gc-random.m4
+  m4/gc.m4
   m4/gnulib-common.m4
   m4/include_next.m4
   m4/ld-version-script.m4

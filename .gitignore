@@ -33,6 +33,8 @@ gl/des.o
 gl/dummy.o
 gl/fseterr.lo
 gl/fseterr.o
+gl/gc-gnulib.lo
+gl/gc-gnulib.o
 gl/isnanl.lo
 gl/isnanl.o
 gl/libgnu.a

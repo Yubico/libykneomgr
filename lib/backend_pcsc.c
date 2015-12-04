@@ -18,12 +18,17 @@
 #include <zip.h>
 #include "internal.h"
 #include "des.h"
+#include "gc.h"
 
 static const uint8_t selectApdu[] =
   { 0x00, 0xa4, 0x04, 0x00, 0x08, 0xa0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00,
   0x00
 };
-static const uint8_t initUpdate[] = { 0x80, 0x50, 0x00, 0x00, 0x08, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08 };	/* TODO: random challenge */
+
+static const uint8_t initUpdate[] =
+  { 0x80, 0x50, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00
+};
 static const uint8_t listApdu[] =
   { 0x80, 0xf2, 0x40, 0x00, 0x02, 0x4f, 0x00 };
 static const uint8_t sdAid[] =
@@ -203,6 +208,7 @@ ykneomgr_rc
 backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
 {
   uint8_t recv[256], send[256];
+  char challenge[8];
   size_t recvlen = sizeof (recv);
   unsigned char buf[16], tmp[16], iv[DES_BLOCK_SIZE], key_buf[24];
   gl_3des_ctx ctx;
@@ -215,7 +221,14 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
     {
       return YKNEOMGR_BACKEND_ERROR;
     }
-  if (backend_apdu (dev, initUpdate, sizeof (initUpdate), recv, &recvlen) !=
+
+  if (gc_pseudo_random (challenge, 8) != 0)
+    {
+      return YKNEOMGR_BACKEND_ERROR;
+    }
+  memcpy (send, initUpdate, sizeof (initUpdate));
+  memcpy (send + 5, challenge, 8);
+  if (backend_apdu (dev, send, sizeof (initUpdate), recv, &recvlen) !=
       YKNEOMGR_OK)
     {
       return YKNEOMGR_BACKEND_ERROR;
@@ -250,7 +263,7 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
 		    (const char *) (key_buf + 8));
 
   memset (iv, 0, sizeof (iv));
-  memcpy (buf, initUpdate + 5, 8);	/* our "random" challenge */
+  memcpy (buf, challenge, 8);	/* the random challenge */
   buf[8] = recv[12];
   buf[9] = recv[13];
   memcpy (buf + 10, recv + 14, 6);	/* the card challenge */
@@ -270,7 +283,7 @@ backend_authenticate (ykneomgr_dev * dev, const uint8_t * key)
   buf[0] = recv[12];
   buf[1] = recv[13];
   memcpy (buf + 2, recv + 14, 6);
-  memcpy (buf + 8, initUpdate + 5, 8);
+  memcpy (buf + 8, challenge, 8);
 
   gl_3des_ecb_encrypt (&dev->enc3DesKey, (const char *) buf, (char *) tmp);
   for (i = 0; i < 8; i++)

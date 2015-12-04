@@ -1,4 +1,4 @@
-# Copyright (C) 2002-2014 Free Software Foundation, Inc.
+# Copyright (C) 2002-2015 Free Software Foundation, Inc.
 #
 # This file is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,16 +27,18 @@
 
 
 # Specification in the form of a command-line invocation:
-#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=build-aux --lgpl=3 --no-conditional-dependencies --libtool --macro-prefix=gl --no-vc-files crypto/des havelib lib-symbol-versions maintainer-makefile manywarnings
+#   gnulib-tool --import --dir=. --lib=libgnu --source-base=gl --m4-base=gl/m4 --doc-base=doc --tests-base=tests --aux-dir=build-aux --lgpl=3 --no-conditional-dependencies --libtool --macro-prefix=gl --no-vc-files crypto/des crypto/gc-random havelib lib-symbol-versions maintainer-makefile manywarnings sys_types
 
 # Specification in the form of a few gnulib-tool.m4 macro invocations:
 gl_LOCAL_DIR([])
 gl_MODULES([
   crypto/des
+  crypto/gc-random
   havelib
   lib-symbol-versions
   maintainer-makefile
   manywarnings
+  sys_types
 ])
 gl_AVOID([])
 gl_SOURCE_BASE([gl])
