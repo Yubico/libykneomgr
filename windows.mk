@@ -46,6 +46,7 @@ doit:
 	tar xfa libzip-$(LIBZIP_VERSION).tar.gz && \
 	cd libzip-$(LIBZIP_VERSION) && \
 	sed -i 's,regress ,,' Makefile.am && \
+	autoreconf -ifv && \
 	CC="$(HOST)-gcc -static-libgcc" lt_cv_deplibs_check_method=pass_all ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root --with-zlib=$(PWD)/tmp$(ARCH)/root && \
 	make install && \
 	rm -f $(PWD)/tmp$(ARCH)/root/bin/zipcmp.exe $(PWD)/tmp$(ARCH)/root/bin/zipmerge.exe $(PWD)/tmp$(ARCH)/root/bin/ziptorrent.exe && \
