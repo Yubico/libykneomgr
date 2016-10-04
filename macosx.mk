@@ -49,6 +49,8 @@ doit:
 	install_name_tool -change $(PWD)/tmp/root/lib/libzip.2.dylib @executable_path/../lib/libzip.2.dylib $(PWD)/tmp/root/bin/ykneomgr && \
 	install_name_tool -id @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/lib/libykneomgr.0.dylib && \
 	install_name_tool -change $(PWD)/tmp/root/lib/libykneomgr.0.dylib @executable_path/../lib/libykneomgr.0.dylib $(PWD)/tmp/root/bin/ykneomgr && \
+	rm $(PWD)/tmp/root/lib/*.la && \
+	rm -rf $(PWD)/tmp/root/lib/pkgconfig && \
 	mkdir $(PWD)/tmp/root/doc && \
 	cp gtk-doc/$(PACKAGE).pdf $(PWD)/tmp/root/doc/ && \
 	cp COPYING $(PWD)/tmp/root/licenses/$(PACKAGE).txt && \

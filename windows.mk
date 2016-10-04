@@ -56,6 +56,7 @@ doit:
 	cd $(PACKAGE)-$(VERSION)/ && \
 	CC="$(HOST)-gcc -static-libgcc" lt_cv_deplibs_check_method=pass_all PKG_CONFIG_PATH=$(PWD)/tmp$(ARCH)/root/lib/pkgconfig ./configure --host=$(HOST) --build=x86_64-unknown-linux-gnu --prefix=$(PWD)/tmp$(ARCH)/root $(EXTRA) && \
 	make install $(CHECK) && \
+	rm $(PWD)/tmp$(ARCH)/root/lib/*.la && \
 	rm -rf $(PWD)/tmp$(ARCH)/root/lib/pkgconfig/ && \
 	mkdir $(PWD)/tmp$(ARCH)/root/doc && \
 	cp gtk-doc/$(PACKAGE).pdf $(PWD)/tmp$(ARCH)/root/doc/ && \
