@@ -1,6 +1,9 @@
 Yubico YubiKey NEO CCID Manager C Library
 =========================================
 
+NOTE: This project is deprecated and is no longer being maintained.
+Use https://developers.yubico.com/yubikey-manager/[YubiKey Manager] (CLI and Python library) to configure a YubiKey device over CCID.
+
 Introduction
 ------------
 
