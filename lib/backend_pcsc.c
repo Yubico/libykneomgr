@@ -194,7 +194,11 @@ backend_list_devices (ykneomgr_dev * dev, char *devicestr, size_t * len)
 
   result = SCardListReaders (dev->card, NULL, devicestr, &readersSize);
   *len = readersSize;
-  if (result != SCARD_S_SUCCESS)
+  if (result == SCARD_E_NO_READERS_AVAILABLE)
+    {
+      *len = 0;
+    }
+  else if (result != SCARD_S_SUCCESS)
     {
       if (debug)
 	printf ("SCardListReaders %ld\n", (long) result);
