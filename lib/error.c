@@ -31,7 +31,8 @@ static const err_t errors[] = {
   ERR (YKNEOMGR_MEMORY_ERROR, "Memory error (e.g., out of memory)"),
   ERR (YKNEOMGR_NO_DEVICE, "No device found"),
   ERR (YKNEOMGR_TOO_MANY_DEVICES, "Too many devices found"),
-  ERR (YKNEOMGR_BACKEND_ERROR, "Backend error")
+  ERR (YKNEOMGR_BACKEND_ERROR, "Backend error"),
+  ERR (YKNEOMGR_INCORRECT_KEY, "Incorrect key")
 };
 
 /**
